@@ -10,16 +10,6 @@ gitignore:
 
 github_actions:
 - any: [.github/**/*, '!.github/ISSUE_TEMPLATE/*', '!.github/pull_request_template.md']
-- automation/**/*.yml
-- automation/**/*.yaml
-- deployment/**/*.yml
-- deployment/**/*.yaml
-- integration/**/*.yml
-- integration/**/*.yaml
-- pages/**/*.yml
-- pages/**/*.yaml
-- security/**/*.yml
-- security/**/*.yaml
 
 documentation:
 - CHANGELOG.md
@@ -38,16 +28,16 @@ configuration:
 - justfile
 
 automation:
-- automation/**/*
+- .github/workflows/**/*automation*.yml
 
 deployment:
-- deployment/**/*
+- .github/workflows/**/*deployment*.yml
 
 integration:
-- integration/**/*
+- .github/workflows/**/*integration*.yml
 
 pages:
-- pages/**/*
+- .github/workflows/**/*pages*.yml
 
 security:
-- security/**/*
+- .github/workflows/**/*security*.yml

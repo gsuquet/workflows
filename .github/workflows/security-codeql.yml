@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       languages:
-        description: 'The languages to analyze (comma-separated). For example: `go,java`'
+        description: 'The languages to analyze (comma-separated). For example: `go, java`'
         type: string
         required: true
       queries:
@@ -13,10 +13,22 @@ on:
         default: security-and-quality
 
 jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - name: Set up matrix
+      id: set-matrix
+      run: |
+        echo "::set-output name=matrix::$(echo "[${{ inputs.languages }}]")"
+
   analyze:
     name: Analyze
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    needs: setup
     permissions:
       actions: read
       contents: read
@@ -25,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ${{ split(inputs.languages, ',') }}
+        language: ${{ fromJson(needs.setup.outputs.matrix) }}
 
     steps:
     - name: Checkout repository
