@@ -12,7 +12,7 @@ on:
         description: Package manager to cache from pip, pipenv and poetry
         required: false
         type: string
-        default: pip
+
     outputs:
       result:
         description: The result of the pre-commit run
