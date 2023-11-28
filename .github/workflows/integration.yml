@@ -22,3 +22,7 @@ jobs:
     uses: ./.github/workflows/security-dependencies.yml
     with:
       comment: always
+
+  pre-commit:
+    if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
+    uses: ./.github/workflows/integration-linter-pre-commit.yml
