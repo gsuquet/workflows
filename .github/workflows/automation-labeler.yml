@@ -7,7 +7,7 @@ on:
         description: Path to the configuration file
         required: false
         type: string
-        default: ./.github/labeler.yml
+        default: .github/labeler.yml
 
 permissions:
   contents: read
