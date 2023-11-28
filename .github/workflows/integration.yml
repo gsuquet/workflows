@@ -1,0 +1,20 @@
+name: Code integration
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+    branches:
+    - main
+
+jobs:
+  label:
+    uses: ./automation/labeler.yml
+
+  lint-pr:
+    if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
+    uses: ./integration/linter-pr.yml
+
+  dependency-review:
+    uses: ./security/dependencies.yml
+    with:
+      comment: always

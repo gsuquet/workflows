@@ -1,0 +1,21 @@
+name: Labeler
+
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: Path to the configuration file
+        required: false
+        type: string
+        default: ./.github/labeler.yml
+
+jobs:
+  triage:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/labeler@v4
+      with:
+        configuration-path: ${{ github.event.inputs.config_path }}
