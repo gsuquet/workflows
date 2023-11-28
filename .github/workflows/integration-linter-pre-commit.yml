@@ -1,0 +1,47 @@
+name: Pre-commit
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: Python version, default is 3.12.x
+        required: false
+        type: string
+        default: 3.12.x
+      cache:
+        description: Package manager to cache from pip, pipenv and poetry
+        required: false
+        type: string
+
+    outputs:
+      result:
+        description: The result of the pre-commit run
+        value: ${{ jobs.pre-commit.outputs.result }}
+
+jobs:
+  pre-commit:
+    outputs:
+      result: ${{ steps.pre-commit.outputs.result }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: ${{ inputs.cache }}
+
+    - name: Install pre-commit
+      run: pip install pre-commit
+
+    - name: Run pre-commit hooks on all files
+      run: pre-commit run --all-files --show-diff-on-failure | tee results.txt
+
+    - name: Set pre-commit result as output
+      id: pre-commit
+      run: |
+        result=$(cat results.txt)
+        echo "::set-output name=result::$result"
+      shell: bash
