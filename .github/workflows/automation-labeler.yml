@@ -19,4 +19,4 @@ jobs:
     steps:
     - uses: actions/labeler@v4
       with:
-        configuration-path: ${{ github.event.inputs.config_path }}
+        configuration-path: ${{ inputs.config_path }}
