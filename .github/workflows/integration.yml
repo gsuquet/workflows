@@ -8,6 +8,9 @@ on:
 
 jobs:
   label:
+    permissions:
+      contents: read
+      pull-requests: write
     uses: ./.github/workflows/automation-labeler.yml
 
   lint-pr:
