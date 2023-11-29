@@ -16,36 +16,21 @@ on:
         required: false
         type: string
         description: Regex to validate against
-    outputs:
-      result:
-        description: Whether the commit or PR title format is correct, true or false
-        value: ${{ jobs.validate.outputs.result }}
-      description:
-        description: Comment indicating whether the commit or PR title format is correct
-        value: ${{ jobs.validate.outputs.description }}
-      missing_regex:
-        description: Comment generated when a regex is missing for the custom format
-        value: ${{ jobs.setup.outputs.missing_regex }}
-      invalid_format:
-        description: Comment generated when an invalid format was specified
-        value: ${{ jobs.setup.outputs.invalid_format }}
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
       regex: ${{ steps.set_regex.outputs.regex }}
-      missing_regex: ${{ steps.check_regex.outputs.missing_regex }}
-      invalid_format: ${{ steps.set_regex.outputs.invalid_format }}
     steps:
     - name: Check regex for custom format
       id: check_regex
       run: |
         if [[ "${{ inputs.format }}" == "custom" ]]; then
           if [[ -z "${{ inputs.regex }}" ]]; then
+            echo "## :rotating_light: Missing regex for custom format :rotating_light:" >> $GITHUB_STEP_SUMMARY
             echo "Custom format specified but no regex provided" >> $GITHUB_STEP_SUMMARY
-            echo "Please provide a regex to validate against" >> $GITHUB_STEP_SUMMARY
-            echo "missing_regex=Custom format specified but no regex provided\nPlease provide a regex to validate against" >> $GITHUB_OUTPUT
+            echo "Please provide a regex to validate `${{ inputs.commit_or_pr_title }}`" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
         fi
@@ -60,30 +45,26 @@ jobs:
         elif [[ "${{ inputs.format }}" == "custom" ]]; then
           echo "regex=${{ inputs.regex }}" >> $GITHUB_OUTPUT
         else
-          echo "Invalid format specified" >> $GITHUB_STEP_SUMMARY
+          echo "## :rotating_light: The specified format is invalid :rotating_light:" >> $GITHUB_STEP_SUMMARY
+          echo "The format `${{ inputs.format }}` is not supported yet" >> $GITHUB_STEP_SUMMARY
           echo "Valid formats are: conventional, gitmoji and custom" >> $GITHUB_STEP_SUMMARY
           echo "Custom format requires a regex to be provided" >> $GITHUB_STEP_SUMMARY
-          echo "invalid_format=Invalid format specified\nValid formats are: conventional, gitmoji and custom\nCustom format requires a regex to be provided" >> $GITHUB_OUTPUT
+          echo "Please open an issue on the [workflows repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=enhancement%2Cto+sort&projects=&template=feature.yml) with the corresponding regex to add support for `${{ inputs.format }}`" >> $GITHUB_STEP_SUMMARY"
           exit 1
         fi
 
   validate:
     runs-on: ubuntu-latest
-    outputs:
-      result: ${{ steps.validate.outputs.result }}
-      description: ${{ steps.validate.outputs.description }}
     needs: setup
     steps:
     - name: Validate commit or PR title format
       id: validate
       run: |
         if echo "${{ inputs.commit_or_pr_title }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
-          echo "Commit or PR title format is correct" >> $GITHUB_STEP_SUMMARY
-          echo "result=true" >> $GITHUB_OUTPUT
-          echo "description=Commit or PR title format is correct" >> $GITHUB_OUTPUT
+          echo "## :white_check_mark: Correct format :white_check_mark:" >> $GITHUB_STEP_SUMMARY
+          echo "`${{ inputs.commit_or_pr_title }}` matches the ${{ inputs.format }} format when analyzed using the following regex : `${{ needs.setup.outputs.regex }}`" >> $GITHUB_STEP_SUMMARY
         else
-          echo "Commit or PR title format is incorrect" >> $GITHUB_STEP_SUMMARY
-          echo "result=false" >> $GITHUB_OUTPUT
-          echo "description=Commit or PR title format is incorrect" >> $GITHUB_OUTPUT
+          echo "## :rotating_light: Incorrect format :rotating_light:" >> $GITHUB_STEP_SUMMARY
+          echo "`${{ inputs.commit_or_pr_title }}` does not match the ${{ inputs.format }} format when analyzed using the following regex : `${{ needs.setup.outputs.regex }}`" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
