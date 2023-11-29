@@ -28,6 +28,8 @@ jobs:
     uses: ./.github/workflows/integration-linter-pre-commit.yml
 
   update-package-list:
+    permissions:
+      contents: write
     uses: ./.github/workflows/integration-modification-script.yml
     with:
       script_path: ./scripts/update-package-list.sh
