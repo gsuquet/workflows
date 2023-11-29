@@ -62,9 +62,9 @@ jobs:
       run: |
         if echo "${{ inputs.commit_or_pr_title }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
           echo "## :white_check_mark: Correct format :white_check_mark:" >> $GITHUB_STEP_SUMMARY
-          echo "`${{ inputs.commit_or_pr_title }}` matches the ${{ inputs.format }} format when analyzed using the following regex : `${{ needs.setup.outputs.regex }}`" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{ inputs.commit_or_pr_title }}\` matches the \`${{ inputs.format }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
         else
           echo "## :rotating_light: Incorrect format :rotating_light:" >> $GITHUB_STEP_SUMMARY
-          echo "`${{ inputs.commit_or_pr_title }}` does not match the ${{ inputs.format }} format when analyzed using the following regex : `${{ needs.setup.outputs.regex }}`" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{ inputs.commit_or_pr_title }}\` does not match the \`${{ inputs.format }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
