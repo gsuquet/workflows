@@ -1,0 +1,16 @@
+check for merge conflicts................................................Passed
+don't commit to branch...................................................Passed
+Update markdown table of contents........................................Passed
+Detect secrets...........................................................Passed
+trim trailing whitespace.................................................Passed
+fix end of files.........................................................Passed
+check json...........................................(no files to check)Skipped
+check yaml...............................................................Passed
+validate pre-commit manifest.........................(no files to check)Skipped
+Pretty format YAML.......................................................Passed
+check for added large files..............................................Passed
+check for added large files with git lfs.................................Failed
+- hook id: check-added-large-files-with-git-lfs
+- exit code: 1
+- files were modified by this hook
+

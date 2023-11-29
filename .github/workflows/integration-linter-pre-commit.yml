@@ -32,15 +32,26 @@ jobs:
     - name: Run pre-commit hooks on all files
       run: pre-commit run --all-files --show-diff-on-failure | tee output.txt
 
-    - name: Set pre-commit result as output
+    - name: Display results in the GitHub Actions summary
       id: pre-commit
       run: |
         output=$(cat output.txt)
-        output=$(echo "$output" | sed 's/\[INFO\]/\n- \[INFO\]/g')
         output=$(echo "$output" | grep -v '\[INFO\]')
-        output=$(echo "$output" | sed 's/Passed/Passed\n/g')
-        output=$(echo "$output" | sed 's/Skipped/Skipped\n/g')
 
-        echo "### Pre-commit result" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`$output\`\`\`" >> $GITHUB_STEP_SUMMARY
+        output=$(echo "$output" | sed 's/Passed/:white_check_mark:/g')
+        output=$(echo "$output" | sed 's/Skipped/:ballot_box_with_check:/g')
+        output=$(echo "$output" | sed 's/Failed/:x:/g')
+
+        # Exclude empty lines
+        output=$(echo "$output" | grep -v '^$')
+
+        # Exclude lines that start with '-'
+        output=$(echo "$output" | grep -v '^-')
+
+        # Use awk to format the output into a markdown table, removing the dots
+        output=$(echo "$output" | awk -F':' '{gsub(/\.+/, "", $1); print "| " $1 " | :" $2 ":|"}')
+
+        echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+        echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+        echo "$output" >> $GITHUB_STEP_SUMMARY
       shell: bash
