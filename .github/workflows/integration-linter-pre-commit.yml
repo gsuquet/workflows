@@ -43,5 +43,5 @@ jobs:
       id: pre-commit
       run: |
         result=$(cat results.txt)
-        echo "::set-output name=result::$result"
+        echo "result=$result" >> $GITHUB_OUTPUT
       shell: bash

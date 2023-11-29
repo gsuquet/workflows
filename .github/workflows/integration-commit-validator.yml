@@ -43,9 +43,9 @@ jobs:
       run: |
         if [[ "${{ inputs.format }}" == "custom" ]]; then
           if [[ -z "${{ inputs.regex }}" ]]; then
-            echo "Custom format specified but no regex provided"
-            echo "Please provide a regex to validate against"
-            echo "::set-output name=missing_regex::Custom format specified but no regex provided\nPlease provide a regex to validate against"
+            echo "Custom format specified but no regex provided" >> $GITHUB_STEP_SUMMARY
+            echo "Please provide a regex to validate against" >> $GITHUB_STEP_SUMMARY
+            echo "missing_regex=Custom format specified but no regex provided\nPlease provide a regex to validate against" >> $GITHUB_OUTPUT
             exit 1
           fi
         fi
@@ -54,16 +54,16 @@ jobs:
       id: set_regex
       run: |
         if [[ "${{ inputs.format }}" == "conventional" ]]; then
-          echo "::set-output name=regex::^[a-z_]+(!)?(: .*)?$"
+          echo "regex=^[a-z_]+(!)?(: .*)?$"  >> $GITHUB_OUTPUT
         elif [[ "${{ inputs.format }}" == "gitmoji" ]]; then
-          echo "::set-output name=regex::^:[a-z_]+: [a-z_]+(!)?(: .*)?$"
+          echo "regex=^:[a-z_]+: [a-z_]+(!)?(: .*)?$" >> $GITHUB_OUTPUT
         elif [[ "${{ inputs.format }}" == "custom" ]]; then
-          echo "::set-output name=regex::${{ inputs.regex }}"
+          echo "regex=${{ inputs.regex }}" >> $GITHUB_OUTPUT
         else
-          echo "Invalid format specified"
-          echo "Valid formats are: conventional, gitmoji and custom"
-          echo "Custom format requires a regex to be provided"
-          echo "::set-output name=invalid_format::Invalid format specified\nValid formats are: conventional, gitmoji and custom\nCustom format requires a regex to be provided"
+          echo "Invalid format specified" >> $GITHUB_STEP_SUMMARY
+          echo "Valid formats are: conventional, gitmoji and custom" >> $GITHUB_STEP_SUMMARY
+          echo "Custom format requires a regex to be provided" >> $GITHUB_STEP_SUMMARY
+          echo "invalid_format=Invalid format specified\nValid formats are: conventional, gitmoji and custom\nCustom format requires a regex to be provided" >> $GITHUB_OUTPUT
           exit 1
         fi
 
@@ -78,12 +78,12 @@ jobs:
       id: validate
       run: |
         if echo "${{ inputs.commit_or_pr_title }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
-          echo "Commit or PR title format is correct"
-          echo "::set-output name=result::true"
-          echo "::set-output name=description::Commit or PR title format is correct"
+          echo "Commit or PR title format is correct" >> $GITHUB_STEP_SUMMARY
+          echo "result=true" >> $GITHUB_OUTPUT
+          echo "description=Commit or PR title format is correct" >> $GITHUB_OUTPUT
         else
-          echo "Commit or PR title format is incorrect"
-          echo "::set-output name=result::false"
-          echo "::set-output name=description::Commit or PR title format is incorrect"
+          echo "Commit or PR title format is incorrect" >> $GITHUB_STEP_SUMMARY
+          echo "result=false" >> $GITHUB_OUTPUT
+          echo "description=Commit or PR title format is incorrect" >> $GITHUB_OUTPUT
           exit 1
         fi
