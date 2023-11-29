@@ -47,7 +47,7 @@ jobs:
     - name: Detect changes
       id: detect_changes
       run: |
-        git diff --quiet || echo "::set-output name=changed::true"
+        git diff --quiet || echo "changed=true" >> $GITHUB_OUTPUT
 
     - name: Commit changes
       if: steps.detect_changes.outputs.changed == 'true'
