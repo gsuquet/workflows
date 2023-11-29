@@ -32,6 +32,6 @@ jobs:
       contents: write
     uses: ./.github/workflows/integration-modification-script.yml
     with:
-      script_path: ./scripts/update-package-list.sh
+      script_path: ./scripts/generate_workflows_table.sh
       ref: ${{ github.head_ref }}
       commit_message: ':memo: doc: Update workflow list in README.md'
