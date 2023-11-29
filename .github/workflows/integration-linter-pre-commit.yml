@@ -44,5 +44,5 @@ jobs:
       run: |
         result=$(cat results.txt)
         echo "### Pre-commit result" >> $GITHUB_STEP_SUMMARY
-        echo "result=\`\`\`$result\`\`\`" >>  >> $GITHUB_STEP_SUMMARY
+        echo "result=\`\`\`$result\`\`\`" >> $GITHUB_STEP_SUMMARY
       shell: bash
