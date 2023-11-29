@@ -49,7 +49,7 @@ jobs:
           echo "The format `${{ inputs.format }}` is not supported yet" >> $GITHUB_STEP_SUMMARY
           echo "Valid formats are: conventional, gitmoji and custom" >> $GITHUB_STEP_SUMMARY
           echo "Custom format requires a regex to be provided" >> $GITHUB_STEP_SUMMARY
-          echo "Please open an issue on the [workflows repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=enhancement%2Cto+sort&projects=&template=feature.yml) with the corresponding regex to add support for `${{ inputs.format }}`" >> $GITHUB_STEP_SUMMARY"
+          echo "Please open an issue on the [workflows repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=enhancement%2Cto+sort&projects=&template=feature.yml) with the corresponding regex to add support for `${{ inputs.format }}`" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
 
