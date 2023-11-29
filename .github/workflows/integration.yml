@@ -30,7 +30,7 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
     uses: ./.github/workflows/integration-linter-pre-commit.yml
 
-  update-package-list:
+  update-workflows-list:
     permissions:
       contents: write
     uses: ./.github/workflows/integration-modification-script.yml
