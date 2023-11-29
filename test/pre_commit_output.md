@@ -12,3 +12,5 @@
 | Pretty format YAML | :white_check_mark:|
 | check for added large files | :white_check_mark:|
 | check for added large files with git lfs | :x:|
+| Fixing test/pre_commit_outputtxt | ::|
+| check for added large files with git lfs | :white_check_mark:|

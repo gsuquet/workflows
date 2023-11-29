@@ -14,3 +14,6 @@ check for added large files with git lfs.................................Failed
 - exit code: 1
 - files were modified by this hook
 
+Fixing test/pre_commit_output.txt
+
+check for added large files with git lfs.................................Passed

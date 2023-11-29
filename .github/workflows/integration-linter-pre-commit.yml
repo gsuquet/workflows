@@ -48,6 +48,9 @@ jobs:
         # Exclude lines that start with '-'
         output=$(echo "$output" | grep -v '^-')
 
+        # Exclude lines that start with 'Fixing'
+        output=$(echo "$output" | grep -v '^Fixing')
+
         # Use awk to format the output into a markdown table, removing the dots
         output=$(echo "$output" | awk -F':' '{gsub(/\.+/, "", $1); print "| " $1 " | :" $2 ":|"}')
 
