@@ -13,15 +13,8 @@ on:
         required: false
         type: string
 
-    outputs:
-      result:
-        description: The result of the pre-commit run
-        value: ${{ jobs.pre-commit.outputs.result }}
-
 jobs:
   pre-commit:
-    outputs:
-      result: ${{ steps.pre-commit.outputs.result }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -37,12 +30,17 @@ jobs:
       run: pip install pre-commit
 
     - name: Run pre-commit hooks on all files
-      run: pre-commit run --all-files --show-diff-on-failure | tee results.txt
+      run: pre-commit run --all-files --show-diff-on-failure | tee output.txt
 
     - name: Set pre-commit result as output
       id: pre-commit
       run: |
-        result=$(cat results.txt)
+        output=$(cat output.txt)
+        output=$(echo "$output" | sed 's/\[INFO\]/\n- \[INFO\]/g')
+        output=$(echo "$output" | grep -v '\[INFO\]')
+        output=$(echo "$output" | sed 's/Passed/Passed\n/g')
+        output=$(echo "$output" | sed 's/Skipped/Skipped\n/g')
+
         echo "### Pre-commit result" >> $GITHUB_STEP_SUMMARY
-        echo "result=\`\`\`$result\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`$output\`\`\`" >> $GITHUB_STEP_SUMMARY
       shell: bash
