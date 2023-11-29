@@ -14,9 +14,12 @@ jobs:
   label:
     uses: ./.github/workflows/automation-labeler.yml
 
-  lint-pr:
+  lint-pr-title:
     if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
-    uses: ./.github/workflows/integration-linter-pr.yml
+    uses: ./.github/workflows/integration-commit-validator.yml
+    with:
+      commit_or_pr_title: ${{ github.event.pull_request.title }}
+      format: gitmoji
 
   dependency-review:
     uses: ./.github/workflows/security-dependencies.yml

@@ -1,0 +1,89 @@
+name: Validate commit or PR title format is correct
+
+on:
+  workflow_call:
+    inputs:
+      commit_or_pr_title:
+        required: true
+        type: string
+        description: Commit or PR title to validate
+      format:
+        required: false
+        type: string
+        default: conventional
+        description: Commit or PR title format to validate against, from conventional, gitmoji or custom
+      regex:
+        required: false
+        type: string
+        description: Regex to validate against
+    outputs:
+      result:
+        description: Whether the commit or PR title format is correct, true or false
+        value: ${{ jobs.validate.outputs.result }}
+      description:
+        description: Comment indicating whether the commit or PR title format is correct
+        value: ${{ jobs.validate.outputs.description }}
+      missing_regex:
+        description: Comment generated when a regex is missing for the custom format
+        value: ${{ jobs.setup.outputs.missing_regex }}
+      invalid_format:
+        description: Comment generated when an invalid format was specified
+        value: ${{ jobs.setup.outputs.invalid_format }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      regex: ${{ steps.set_regex.outputs.regex }}
+      missing_regex: ${{ steps.check_regex.outputs.missing_regex }}
+      invalid_format: ${{ steps.set_regex.outputs.invalid_format }}
+    steps:
+    - name: Check regex for custom format
+      id: check_regex
+      run: |
+        if [[ "${{ inputs.format }}" == "custom" ]]; then
+          if [[ -z "${{ inputs.regex }}" ]]; then
+            echo "Custom format specified but no regex provided"
+            echo "Please provide a regex to validate against"
+            echo "::set-output name=missing_regex::Custom format specified but no regex provided\nPlease provide a regex to validate against"
+            exit 1
+          fi
+        fi
+
+    - name: Set regex to use
+      id: set_regex
+      run: |
+        if [[ "${{ inputs.format }}" == "conventional" ]]; then
+          echo "::set-output name=regex::^[a-z_]+(!)?(: .*)?$"
+        elif [[ "${{ inputs.format }}" == "gitmoji" ]]; then
+          echo "::set-output name=regex::^:[a-z_]+: [a-z_]+(!)?(: .*)?$"
+        elif [[ "${{ inputs.format }}" == "custom" ]]; then
+          echo "::set-output name=regex::${{ inputs.regex }}"
+        else
+          echo "Invalid format specified"
+          echo "Valid formats are: conventional, gitmoji and custom"
+          echo "Custom format requires a regex to be provided"
+          echo "::set-output name=invalid_format::Invalid format specified\nValid formats are: conventional, gitmoji and custom\nCustom format requires a regex to be provided"
+          exit 1
+        fi
+
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.validate.outputs.result }}
+      description: ${{ steps.validate.outputs.description }}
+    needs: setup
+    steps:
+    - name: Validate commit or PR title format
+      id: validate
+      run: |
+        if echo "${{ inputs.commit_or_pr_title }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
+          echo "Commit or PR title format is correct"
+          echo "::set-output name=result::true"
+          echo "::set-output name=description::Commit or PR title format is correct"
+        else
+          echo "Commit or PR title format is incorrect"
+          echo "::set-output name=result::false"
+          echo "::set-output name=description::Commit or PR title format is incorrect"
+          exit 1
+        fi

@@ -26,9 +26,10 @@ jobs:
 | Category | Workflow | Description |
 | --- | --- | --- |
 | automation | [closer](./.github/workflows/automation-closer.yml) | Close stale issues and PRs |
+| automation | [comment-pr](./.github/workflows/automation-comment-pr.yml) | Add or update a comment on the pull request |
 | automation | [greeter](./.github/workflows/automation-greeter.yml) | Greetings |
 | automation | [labeler](./.github/workflows/automation-labeler.yml) | Labeler |
-| integration | [linter-pr](./.github/workflows/integration-linter-pr.yml) | PR name linter |
+| integration | [commit-validator](./.github/workflows/integration-commit-validator.yml) | Validate commit or PR title format is correct |
 | integration | [linter-pre-commit](./.github/workflows/integration-linter-pre-commit.yml) | Pre-commit |
 | integration | [modification-script](./.github/workflows/integration-modification-script.yml) | Execute script and commit changes to git |
 | integration | [integration](./.github/workflows/integration.yml) | Code integration |
