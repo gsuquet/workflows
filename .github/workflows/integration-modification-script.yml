@@ -1,0 +1,53 @@
+name: Execute script and commit changes to git
+
+on:
+  workflow_call:
+    inputs:
+      script_path:
+        description: Path to the script, relative to the repository root e.g. ./scripts/update-readme.sh
+        required: true
+        type: string
+      ref:
+        description: Branch to commit changes to
+        required: true
+        type: string
+      commit_message:
+        description: Commit message, defaults to "Update README.md"
+        required: false
+        type: string
+        default: ':memo: doc: Update README.md'
+      commit_author:
+        description: Commit author, defaults to GitHub Action
+        required: false
+        type: string
+        default: GitHub Action
+      commit_email:
+        description: Commit email, defaults to GitHub Action email
+        required: false
+        type: string
+        default: 41898282+github-actions[bot]@users.noreply.github.com
+
+permissions:
+  contents: write
+
+jobs:
+  execute-script:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
+
+    - name: Run script
+      run: |
+        chmod +x ${{ inputs.script_path }}
+        ${{ inputs.script_path }}
+
+    - name: Commit changes
+      run: |
+        git config --local user.name "${{ inputs.commit_author }}"
+        git config --local user.email "${{ inputs.commit_email }}"
+        git add .
+        git commit -m "${{ inputs.commit_message }}"
+        git push origin ${{ inputs.ref }}
