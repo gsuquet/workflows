@@ -1,0 +1,141 @@
+gitmojis:
+- code: ':art:'
+  description: Improve structure / format of the code.
+- code: ':zap:'
+  description: Improve performance.
+- code: ':fire:'
+  description: Remove code or files.
+- code: ':bug:'
+  description: Fixing a bug.
+- code: ':ambulance:'
+  description: Critical hotfix.
+- code: ':sparkles:'
+  description: Introduce new features.
+- code: ':memo:'
+  description: Add or update documentation.
+- code: ':rocket:'
+  description: Deploy stuff.
+- code: ':lipstick:'
+  description: Update the UI and style files.
+- code: ':tada:'
+  description: Initial commit.
+- code: ':white_check_mark:'
+  description: Add, update, or pass tests.
+- code: ':lock:'
+  description: Fix security issues.
+- code: ':closed_lock_with_key:'
+  description: Add or update secrets.
+- code: ':bookmark:'
+  description: Release / Version tags.
+- code: ':rotating_light:'
+  description: Fix compiler / linter warnings.
+- code: ':construction:'
+  description: Work in progress.
+- code: ':green_heart:'
+  description: Fix CI Build.
+- code: ':arrow_down:'
+  description: Downgrade dependencies.
+- code: ':arrow_up:'
+  description: Upgrade dependencies.
+- code: ':pushpin:'
+  description: Pin dependencies to specific versions.
+- code: ':construction_worker:'
+  description: Add or update CI build system.
+- code: ':chart_with_upwards_trend:'
+  description: Add or update analytics or track code.
+- code: ':recycle:'
+  description: Refactor code.
+- code: ':heavy_plus_sign:'
+  description: Add a dependency.
+- code: ':heavy_minus_sign:'
+  description: Remove a dependency.
+- code: ':wrench:'
+  description: Add or update configuration files.
+- code: ':hammer:'
+  description: Add or update development scripts.
+- code: ':globe_with_meridians:'
+  description: Internationalization and localization.
+- code: ':pencil2:'
+  description: Fix typos.
+- code: ':poop:'
+  description: Write bad code that needs to be improved.
+- code: ':rewind:'
+  description: Revert changes.
+- code: ':twisted_rightwards_arrows:'
+  description: Merge branches.
+- code: ':package:'
+  description: Add or update compiled files or packages.
+- code: ':alien:'
+  description: Update code due to external API changes.
+- code: ':truck:'
+  description: 'Move or rename resources (e.g.: files, paths, routes).'
+- code: ':page_facing_up:'
+  description: Add or update license.
+- code: ':boom:'
+  description: Introduce breaking changes.
+- code: ':bento:'
+  description: Add or update assets.
+- code: ':wheelchair:'
+  description: Improve accessibility.
+- code: ':bulb:'
+  description: Add or update comments in source code.
+- code: ':beers:'
+  description: Write code drunkenly.
+- code: ':speech_balloon:'
+  description: Add or update text and literals.
+- code: ':card_file_box:'
+  description: Perform database related changes.
+- code: ':loud_sound:'
+  description: Add or update logs.
+- code: ':mute:'
+  description: Remove logs.
+- code: ':busts_in_silhouette:'
+  description: Add or update contributor(s).
+- code: ':children_crossing:'
+  description: Improve user experience / usability.
+- code: ':building_construction:'
+  description: Make architectural changes.
+- code: ':iphone:'
+  description: Work on responsive design.
+- code: ':clown_face:'
+  description: Mock things.
+- code: ':egg:'
+  description: Add or update an easter egg.
+- code: ':see_no_evil:'
+  description: Add or update a .gitignore file.
+- code: ':camera_flash:'
+  description: Add or update snapshots.
+- code: ':alembic:'
+  description: Try out new things.
+- code: ':mag:'
+  description: Improve SEO.
+- code: ':goal_net:'
+  description: Catch errors.
+- code: ':dizzy:'
+  description: Add or update animations and transitions.
+- code: ':wastebasket:'
+  description: Deprecate code that needs to be cleaned up.
+- code: ':passport_control:'
+  description: Work on code related to authorization and permissions.
+- code: ':adhesive_bandage:'
+  description: Simple fix for a non-critical issue.
+- code: ':monocle_face:'
+  description: Data exploration/inspection.
+- code: ':coffin:'
+  description: Remove dead code.
+- code: ':test_tube:'
+  description: Add a failing test.
+- code: ':necktie:'
+  description: Add or update business logic.
+- code: ':stethoscope:'
+  description: Add or update health checks.
+- code: ':bricks:'
+  description: Infrastructure related changes.
+- code: ':technologist:'
+  description: Improve developer experience.
+- code: ':money_with_wings:'
+  description: Add sponsorship or money related infrastructure.
+- code: ':thread:'
+  description: Add or update code related to multi-threading or concurrency.
+- code: ':safety_vest:'
+  description: Add or update code related to validation
