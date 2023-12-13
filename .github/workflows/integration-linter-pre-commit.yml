@@ -47,7 +47,7 @@ jobs:
           echo "If you think this is a false positive, please open an issue on the [GitHub repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=bug%2Cto+sort&projects=&template=bug_report.yml)." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
         else
-          echo "## :white_check_mark: Pre-commit checks passed :white_check_mark:\n" >> $GITHUB_STEP_SUMMARY
+          echo "## :white_check_mark: Pre-commit checks passed :white_check_mark:" >> $GITHUB_STEP_SUMMARY
         fi
 
         # Exclude lines that don't end with Passed, Skipped or Failed
