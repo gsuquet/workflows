@@ -1,0 +1,33 @@
+name: Create new semantic version, tag and release it
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Branch to release
+        required: true
+        type: string
+      commit_author:
+        description: Commit author, defaults to GitHub Action
+        required: false
+        type: string
+        default: GitHub Action
+      commit_email:
+        description: Commit email, defaults to GitHub Action email
+        required: false
+        type: string
+        default: 41898282+github-actions[bot]@users.noreply.github.com
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Setup
+        run: |
+          git config --global user.name "${{ inputs.commit_author }}"
+          git config --global user.email "${{ inputs.commit_email }}"s
