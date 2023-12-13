@@ -28,7 +28,7 @@ jobs:
       run: |
         if [[ "${{ inputs.format }}" == "custom" ]]; then
           if [[ -z "${{ inputs.regex }}" ]]; then
-            echo "## :rotating_light: Missing regex for custom format :rotating_light:" >> $GITHUB_STEP_SUMMARY
+            echo "## :rotating_light: Missing regex for custom format :rotating_light: " >> $GITHUB_STEP_SUMMARY
             echo "Custom format specified but no regex provided" >> $GITHUB_STEP_SUMMARY
             echo "Please provide a regex to validate `${{ inputs.commit_or_pr_title }}`" >> $GITHUB_STEP_SUMMARY
             exit 1
@@ -45,7 +45,7 @@ jobs:
         elif [[ "${{ inputs.format }}" == "custom" ]]; then
           echo "regex=${{ inputs.regex }}" >> $GITHUB_OUTPUT
         else
-          echo "## :rotating_light: The specified format is invalid :rotating_light:" >> $GITHUB_STEP_SUMMARY
+          echo "## :rotating_light: The specified format is invalid :rotating_light: " >> $GITHUB_STEP_SUMMARY
           echo "The format `${{ inputs.format }}` is not supported yet" >> $GITHUB_STEP_SUMMARY
           echo "Valid formats are: conventional, gitmoji and custom" >> $GITHUB_STEP_SUMMARY
           echo "Custom format requires a regex to be provided" >> $GITHUB_STEP_SUMMARY
@@ -61,10 +61,10 @@ jobs:
       id: validate
       run: |
         if echo "${{ inputs.commit_or_pr_title }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
-          echo "## :white_check_mark: Correct format :white_check_mark:" >> $GITHUB_STEP_SUMMARY
+          echo "## :white_check_mark: Correct format :white_check_mark: " >> $GITHUB_STEP_SUMMARY
           echo "\`${{ inputs.commit_or_pr_title }}\` matches the \`${{ inputs.format }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
         else
-          echo "## :rotating_light: Incorrect format :rotating_light:" >> $GITHUB_STEP_SUMMARY
+          echo "## :rotating_light: Incorrect format :rotating_light: " >> $GITHUB_STEP_SUMMARY
           echo "\`${{ inputs.commit_or_pr_title }}\` does not match the \`${{ inputs.format }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
