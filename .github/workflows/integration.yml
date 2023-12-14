@@ -11,6 +11,13 @@ permissions:
   pull-requests: write
 
 jobs:
+  infos:
+    uses: ./.github/workflows/automation-display-workflow-info.yml
+    with:
+      event_name: ${{ github.event_name }}
+      branch_name: ${{ github.ref }}
+      repository: ${{ github.repository }}
+
   label:
     uses: ./.github/workflows/automation-labeler.yml
 
