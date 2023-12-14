@@ -38,7 +38,8 @@ jobs:
         output=$(cat output.txt)
 
         if grep -q 'Failed' output; then
-          echo "## :x: Pre-commit checks failed :x:" >> $GITHUB_STEP_SUMMARY
+          echo "# Pre-commit" >> $GITHUB_STEP_SUMMARY
+          echo ":x: Pre-commit checks failed" >> $GITHUB_STEP_SUMMARY
           echo "You can reproduce this behavior locally by running :" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
           echo "pre-commit run --all-files --show-diff-on-failure" >> $GITHUB_STEP_SUMMARY
@@ -47,7 +48,8 @@ jobs:
           echo "If you think this is a false positive, please open an issue on the [GitHub repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=bug%2Cto+sort&projects=&template=bug_report.yml)." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
         else
-          echo "## :white_check_mark: Pre-commit checks passed :white_check_mark:\n" >> $GITHUB_STEP_SUMMARY
+          echo "# Pre-commit" >> $GITHUB_STEP_SUMMARY
+          echo ":white_check_mark: Pre-commit checks passed" >> $GITHUB_STEP_SUMMARY
         fi
 
         # Exclude lines that don't end with Passed, Skipped or Failed
@@ -60,7 +62,7 @@ jobs:
         # Use awk to format the output into a markdown table, removing the dots
         output=$(echo "$output" | awk -F':' '{gsub(/\.+/, "", $1); print "| " $1 " | :" $2 ":|"}')
 
-        echo "### Checks summary" >> $GITHUB_STEP_SUMMARY
+        echo "## Checks summary" >> $GITHUB_STEP_SUMMARY
         echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
         echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
         echo "$output" >> $GITHUB_STEP_SUMMARY
