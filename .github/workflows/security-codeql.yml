@@ -9,7 +9,7 @@ on:
       queries:
         description: The queries to run
         type: string
-        required: true
+        required: false
         default: security-and-quality
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
     - name: Set up matrix
       id: set-matrix
       run: |
-        echo "::set-output name=matrix::$(echo "[${{ inputs.languages }}]")"
+        echo "matrix=$(echo "[${{ inputs.languages }}]")" >> $GITHUB_OUTPUT
 
   analyze:
     name: Analyze
