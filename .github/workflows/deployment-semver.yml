@@ -38,6 +38,12 @@ jobs:
       with:
         ref: ${{ inputs.ref }}
 
+    - name: Setup
+      run: |
+        sudo add-apt-repository ppa:rmescandon/yq
+        sudo apt update
+        sudo apt install yq -y
+
     - name: Get repo info
       run: |
         ORIGIN_URL=$(git config --get remote.origin.url | tr -d '\n')
@@ -63,8 +69,10 @@ jobs:
 
         if [ -z "$LAST_TAG" ]; then
             COMMITS_RANGE="HEAD"
+            echo "No semantic tag found, using \` HEAD \` as commits range" >> $GITHUB_STEP_SUMMARY
         else
             COMMITS_RANGE=$(git rev-list -1 $LAST_TAG)
+            echo "The last semantic tag is \` $LAST_TAG" \` >> $GITHUB_STEP_SUMMARY
         fi
 
         echo "LAST_TAG=$LAST_TAG" >> $GITHUB_OUTPUT
