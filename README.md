@@ -2,6 +2,12 @@
 
 This repository contains all the github actions workflows used in my projects.
 
+<p align="center">
+  <a href="https://github.com/gsuquet/workflows/blob/main/LICENSE" target="_blank" alt="License">
+    <img src="https://img.shields.io/github/license/gsuquet/workflows" alt="License">
+  </a>
+</p>
+
 ## Usage
 
 To use a workflow in your project, either copy the workflow file to your project's `.github/workflows` directory or call it directly from the `uses` field in your workflow file.
