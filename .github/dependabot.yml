@@ -1,5 +1,6 @@
 version: 2
 updates:
+# GitHub Actions and workflows
 - package-ecosystem: github-actions
   directory: /
   schedule:
@@ -8,3 +9,19 @@ updates:
   - gsuquet
   assignees:
   - gsuquet
+  target-branch: main
+  commit-message:
+    prefix: ':arrow_up: chore(ci)'
+
+# Docker
+- package-ecosystem: docker
+  directory: /.devcontainer
+  schedule:
+    interval: weekly
+  reviewers:
+  - gsuquet
+  assignees:
+  - gsuquet
+  target-branch: main
+  commit-message:
+    prefix: ':money_with_wings: chore(docker)'
