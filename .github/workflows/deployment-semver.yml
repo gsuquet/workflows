@@ -40,6 +40,7 @@ jobs:
 
     - name: Setup
       run: |
+        echo "# Semantic versioning" >> $GITHUB_STEP_SUMMARY
         sudo add-apt-repository ppa:rmescandon/yq
         sudo apt update
         sudo apt install yq -y
@@ -58,6 +59,7 @@ jobs:
     - name: Get last semantic tag
       id: get_latest_tag
       run: |
+        echo "## Last semantic tag" >> $GITHUB_STEP_SUMMARY
         TAGS=$(git tag -l --sort=-v:refname)
         LAST_TAG=""
         for tag in $TAGS; do
@@ -81,13 +83,17 @@ jobs:
     - name: Get commits since last tag
       id: get_commits
       run: |
+        echo "Getting commits since last tag..."
+        echo "## Commits since last tag" >> $GITHUB_STEP_SUMMARY
         NEW_COMMITS=$(git log --pretty=format:"+++%s__%h__%H" ${{ steps.get_latest_tag.outputs.COMMITS_RANGE }})
         NEW_COMMITS=$(echo "$NEW_COMMITS" | sed '/^$/d' | sed 's/^\+\+\+//g' | sed 's/__/\n/g')
 
+        echo "Processing commits..."
         echo "| release type | gitmoji | type | message | short hash | hash |" >> $GITHUB_STEP_SUMMARY
         echo "|--------------|---------|------|---------|------------|------|" >> $GITHUB_STEP_SUMMARY
 
         while IFS= read -r line; do
+
           IFS='__' read -r -a array <<< "$line"
           message=${array[0]}
           short_hash=${array[1]}
@@ -99,6 +105,7 @@ jobs:
           short_hash=$(echo "$short_hash" | grep -oP '[0-9a-f]{7}')
           hash=$(echo "$hash" | grep -oP '[0-9a-f]{40}')
 
+          echo "Processing commit $short_hash..."
           if yq e ".major[] | select(. == \"$gitmoji\")" ${{ inputs.semantic_tag_rule_file }} > /dev/null; then
             release_type="major"
           elif yq e ".minor[] | select(. == \"$gitmoji\")" ${{ inputs.semantic_tag_rule_file }} > /dev/null; then
@@ -113,10 +120,12 @@ jobs:
         done <<< "$NEW_COMMITS"
 
         echo "NEW_COMMITS=$NEW_COMMITS" >> $GITHUB_OUTPUT
+        echo "Finished processing commits."
 
     - name: Create new semantic version
       id: create_new_semantic_version
       run: |
+        echo "## New semantic version" >> $GITHUB_STEP_SUMMARY
         RELEASE_SEVERITY_ORDER=("major" "minor" "patch")
         # search for the highest severity release type in commits
         RELEASE_SEVERITY=""
