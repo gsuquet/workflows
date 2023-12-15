@@ -17,17 +17,141 @@ on:
         required: false
         type: string
         default: 41898282+github-actions[bot]@users.noreply.github.com
+      semantic_tag_pattern:
+        description: Semantic tag pattern, defaults to '^v?([0-9]+)\.([0-9]+)\.([0-9]+)$'
+        required: false
+        type: string
+        default: ^v?([0-9]+)\.([0-9]+)\.([0-9]+)$
+      semantic_tag_rule_file:
+        description: Semantic tag rule file, defaults to .github/semver_gitmoji.yml
+        required: false
+        type: string
+        default: .github/semver_gitmoji.yml
+
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref }}
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
 
-      - name: Setup
-        run: |
-          git config --global user.name "${{ inputs.commit_author }}"
-          git config --global user.email "${{ inputs.commit_email }}"s
+    - name: Get repo info
+      run: |
+        ORIGIN_URL=$(git config --get remote.origin.url | tr -d '\n')
+        REPO_HOST=$(echo "$ORIGIN_URL" | awk -F'[@/]' '{print $2}')
+        REPO_NAME=$(echo "$ORIGIN_URL" | awk -F'[@/]' '{print $3}')
+        REPO_PUBLIC_URL="https://$REPO_HOST/$REPO_NAME"
+
+        echo "ORIGIN_URL=$ORIGIN_URL" >> $GITHUB_OUTPUT
+        echo "REPO_HOST=$REPO_HOST" >> $GITHUB_OUTPUT
+        echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
+
+    - name: Get last semantic tag
+      id: get_latest_tag
+      run: |
+        TAGS=$(git tag -l --sort=-v:refname)
+        LAST_TAG=""
+        for tag in $TAGS; do
+            if [[ $tag =~ ${{ inputs.semantic_tag_pattern }} ]]; then
+                LAST_TAG=$tag
+                break
+            fi
+        done
+
+        if [ -z "$LAST_TAG" ]; then
+            COMMITS_RANGE="HEAD"
+        else
+            COMMITS_RANGE=$(git rev-list -1 $LAST_TAG)
+        fi
+
+        echo "LAST_TAG=$LAST_TAG" >> $GITHUB_OUTPUT
+        echo "COMMITS_RANGE=$COMMITS_RANGE" >> $GITHUB_OUTPUT
+
+    - name: Get commits since last tag
+      id: get_commits
+      run: |
+        NEW_COMMITS=$(git log --pretty=format:"+++%s__%h__%H" ${{ steps.get_latest_tag.outputs.COMMITS_RANGE }})
+        NEW_COMMITS=$(echo "$NEW_COMMITS" | sed '/^$/d' | sed 's/^\+\+\+//g' | sed 's/__/\n/g')
+
+        echo "| release type | gitmoji | type | message | short hash | hash |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------------|---------|------|---------|------------|------|" >> $GITHUB_STEP_SUMMARY
+
+        while IFS= read -r line; do
+          IFS='__' read -r -a array <<< "$line"
+          message=${array[0]}
+          short_hash=${array[1]}
+          hash=${array[2]}
+
+          gitmoji=$(echo "$message" | grep -oP ':\K[^:]*')
+          type=$(echo "$message" | grep -oP ':\K[^:]*')
+          message=$(echo "$message" | sed -e 's/.*://')
+          short_hash=$(echo "$short_hash" | grep -oP '[0-9a-f]{7}')
+          hash=$(echo "$hash" | grep -oP '[0-9a-f]{40}')
+
+          if yq e ".major[] | select(. == \"$gitmoji\")" ${{ inputs.semantic_tag_rule_file }} > /dev/null; then
+            release_type="major"
+          elif yq e ".minor[] | select(. == \"$gitmoji\")" ${{ inputs.semantic_tag_rule_file }} > /dev/null; then
+            release_type="minor"
+          elif yq e ".patch[] | select(. == \"$gitmoji\")" ${{ inputs.semantic_tag_rule_file }} > /dev/null; then
+            release_type="patch"
+          else
+            release_type=""
+          fi
+
+        echo "| $release_type | $gitmoji | $type | $message | $short_hash | $hash |" >> $GITHUB_STEP_SUMMARY
+        done <<< "$NEW_COMMITS"
+
+        echo "NEW_COMMITS=$NEW_COMMITS" >> $GITHUB_OUTPUT
+
+    - name: Create new semantic version
+      id: create_new_semantic_version
+      run: |
+        RELEASE_SEVERITY_ORDER=("major" "minor" "patch")
+        # search for the highest severity release type in commits
+        RELEASE_SEVERITY=""
+        for release_type in "${RELEASE_SEVERITY_ORDER[@]}"; do
+          if grep -q "| $release_type |" ${{ steps.get_commits.outputs.NEW_COMMITS }}; then
+            RELEASE_SEVERITY=$release_type
+            break
+          fi
+        done
+
+        echo "RELEASE_SEVERITY=$RELEASE_SEVERITY" >> $GITHUB_OUTPUT
+
+        if [ -z "$RELEASE_SEVERITY" ]; then
+          echo "No release type found in commits, skipping release" >> $GITHUB_STEP_SUMMARY
+          exit 0
+        fi
+
+        PKG_JSON=$(cat package.json)
+
+        if [ -z "${{ steps.get_latest_tag.outputs.LAST_TAG }}" ]; then
+          NEXT_VERSION=${PKG_JSON##*\"version\": \"}
+          NEXT_VERSION=${NEXT_VERSION%%\"*}
+          NEXT_VERSION=${NEXT_VERSION:-"1.0.0"}
+        else
+          if [[ ${{ steps.get_latest_tag.outputs.LAST_TAG }} =~ ${{ inputs.semantic_tag_pattern }} ]]; then
+            MAJOR=${BASH_REMATCH[1]}
+            MINOR=${BASH_REMATCH[2]}
+            PATCH=${BASH_REMATCH[3]}
+
+            if [ "$RELEASE_SEVERITY" == "major" ]; then
+              MAJOR=$((MAJOR+1))
+              MINOR=0
+              PATCH=0
+            elif [ "$RELEASE_SEVERITY" == "minor" ]; then
+              MINOR=$((MINOR+1))
+              PATCH=0
+            elif [ "$RELEASE_SEVERITY" == "patch" ]; then
+              PATCH=$((PATCH+1))
+            fi
+
+            NEXT_VERSION="$MAJOR.$MINOR.$PATCH"
+          fi
+        fi
+
+        echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_OUTPUT
+        echo "The next semantic version is $NEXT_VERSION" >> $GITHUB_STEP_SUMMARY
