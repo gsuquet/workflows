@@ -33,7 +33,7 @@ jobs:
     steps:
     - name: Download artifacts
       if: ${{ inputs.artifact_name }}
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifact_name }}
         path: ${{ inputs.files_path }}
