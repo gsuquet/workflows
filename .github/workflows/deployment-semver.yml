@@ -86,7 +86,9 @@ jobs:
         echo "Getting commits since last tag..."
         echo "## Commits since last tag" >> $GITHUB_STEP_SUMMARY
         NEW_COMMITS=$(git log --pretty=format:"+++%s__%h__%H" ${{ steps.get_latest_tag.outputs.COMMITS_RANGE }})
+        echo "NEW_COMMITS before processing: $NEW_COMMITS"
         NEW_COMMITS=$(echo "$NEW_COMMITS" | sed '/^$/d' | sed 's/^\+\+\+//g' | sed 's/__/\n/g')
+        echo "NEW_COMMITS after processing: $NEW_COMMITS"  # Debug log
 
         echo "Processing commits..."
         echo "| release type | gitmoji | type | message | short hash | hash |" >> $GITHUB_STEP_SUMMARY
@@ -98,6 +100,11 @@ jobs:
           message=${array[0]}
           short_hash=${array[1]}
           hash=${array[2]}
+
+          echo "Processing line: $line"
+          echo "Message: $message"
+          echo "Short hash: $short_hash"
+          echo "Hash: $hash"
 
           gitmoji=$(echo "$message" | grep -oP ':\K[^:]*')
           type=$(echo "$message" | grep -oP ':\K[^:]*')
