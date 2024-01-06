@@ -87,8 +87,6 @@ jobs:
         echo "## Commits since last tag" >> $GITHUB_STEP_SUMMARY
         NEW_COMMITS=$(git log --pretty=format:"+++%s__%h__%H" ${{ steps.get_latest_tag.outputs.COMMITS_RANGE }})
         echo "NEW_COMMITS before processing: $NEW_COMMITS"
-        NEW_COMMITS=$(echo "$NEW_COMMITS" | sed '/^$/d' | sed 's/^\+\+\+//g' | sed 's/__/\n/g')
-        echo "NEW_COMMITS after processing: $NEW_COMMITS"  # Debug log
 
         echo "Processing commits..."
         echo "| release type | gitmoji | type | message | short hash | hash |" >> $GITHUB_STEP_SUMMARY
