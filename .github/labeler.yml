@@ -1,43 +1,66 @@
 # PR labeler configuration file
 ci:
-- any: [.github/**/*, '!.github/ISSUE_TEMPLATE/*', '!.github/pull_request_template.md']
-- .pre-commit-config.yaml
-- .pre-commit-config
-- .semrelrc
+- any:
+  - changed-files:
+    - all-globs-to-any-file: [.github/**/*, '!.github/ISSUE_TEMPLATE/*', '!.github/pull_request_template.md']
+    - any-glob-to-any-file:
+      - .pre-commit-config.yaml
+      - .pre-commit-config
+      - .semrelrc
 
 gitignore:
-- .gitignore
+- changed-files:
+  - any-glob-to-any-file:
+    - .gitignore
 
 github_actions:
-- any: [.github/**/*, '!.github/ISSUE_TEMPLATE/*', '!.github/pull_request_template.md']
+- any:
+  - changed-files:
+    - all-globs-to-any-file: [.github/**/*, '!.github/ISSUE_TEMPLATE/*', '!.github/pull_request_template.md']
 
 documentation:
-- CHANGELOG.md
-- CODE_OF_CONDUCT.md
-- CONTRIBUTING.md
-- LICENSE
-- SECURITY.md
-- .github/ISSUE_TEMPLATE/**/*
-- .github/pull_request_template.md
-- '**/README.md'
+- any:
+  - changed-files:
+    - any-glob-to-any-file:
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - SECURITY.md
+      - .github/ISSUE_TEMPLATE/**/*
+      - .github/pull_request_template.md
+      - '**/README.md'
 
 configuration:
-- .devcontainer/**/*
-- .pre-commit-config.yaml
-- .editorconfig
-- justfile
+- any:
+  - changed-files:
+    - any-glob-to-any-file:
+      - .devcontainer/**/*
+      - .pre-commit-config.yaml
+      - .editorconfig
+      - justfile
 
 automation:
-- .github/workflows/**/*automation*.yml
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**/*automation*.yml
 
 deployment:
-- .github/workflows/**/*deployment*.yml
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**/*deployment*.yml
 
 integration:
-- .github/workflows/**/*integration*.yml
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**/*integration*.yml
 
 pages:
-- .github/workflows/**/*pages*.yml
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**/*pages*.yml
 
 security:
-- .github/workflows/**/*security*.yml
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**/*security*.yml
