@@ -1,8 +1,8 @@
-major_tags:
+major:
 - ':boom:'
-minor_tags:
+minor:
 - ':sparkles:'
-patch_tags:
+patch:
 - ':ambulance:'
 - ':bug:'
 - ':adhesive_bandage:'

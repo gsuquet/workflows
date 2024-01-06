@@ -11,6 +11,13 @@ permissions:
   pull-requests: write
 
 jobs:
+  infos:
+    uses: ./.github/workflows/automation-display-workflow-info.yml
+    with:
+      event_name: ${{ github.event_name }}
+      branch_name: ${{ github.ref }}
+      repository: ${{ github.repository }}
+
   label:
     uses: ./.github/workflows/automation-labeler.yml
 
@@ -38,3 +45,9 @@ jobs:
       script_path: ./scripts/generate_workflows_table.sh
       ref: ${{ github.head_ref }}
       commit_message: ':memo: doc: Update workflow list in README.md'
+
+  test-semver:
+    if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
+    uses: ./.github/workflows/deployment-semver.yml
+    with:
+      ref: ${{ github.head_ref }}

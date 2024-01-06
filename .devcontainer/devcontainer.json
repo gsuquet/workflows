@@ -13,7 +13,19 @@
 		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {
 			"version": "latest"
 		},
-		"ghcr.io/guiyomh/features/just:0.1.0": {}
+		"ghcr.io/guiyomh/features/just:0.1.0": {},
+		"ghcr.io/devcontainers-contrib/features/actionlint:1": {
+			"version": "latest"
+		},
+		"ghcr.io/guiyomh/features/just:0": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"moby": true,
+			"installDockerBuildx": true,
+			"version": "latest",
+			"dockerDashComposeVersion": "v2"
+		}
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -29,6 +41,7 @@
         "vscode": {
             "extensions": [
                 "github.vscode-github-actions",
+				"ms-azuretools.vscode-docker",
                 "editorconfig.editorconfig",
 				"seatonjiang.gitmoji-vscode",
                 "pkief.material-icon-theme",
