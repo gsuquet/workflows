@@ -3,13 +3,15 @@ ci:
 - any:
   - changed-files:
     - all-globs-to-any-file: [.github/**/*, '!.github/ISSUE_TEMPLATE/*', '!.github/pull_request_template.md']
-    - .pre-commit-config.yaml
-    - .pre-commit-config
-    - .semrelrc
+    - any-glob-to-any-file:
+      - .pre-commit-config.yaml
+      - .pre-commit-config
+      - .semrelrc
 
 gitignore:
 - changed-files:
-  - .gitignore
+  - any-glob-to-any-file:
+    - .gitignore
 
 github_actions:
 - any:
@@ -19,39 +21,46 @@ github_actions:
 documentation:
 - any:
   - changed-files:
-    - CHANGELOG.md
-    - CODE_OF_CONDUCT.md
-    - CONTRIBUTING.md
-    - LICENSE
-    - SECURITY.md
-    - .github/ISSUE_TEMPLATE/**/*
-    - .github/pull_request_template.md
-    - '**/README.md'
+    - any-glob-to-any-file:
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - SECURITY.md
+      - .github/ISSUE_TEMPLATE/**/*
+      - .github/pull_request_template.md
+      - '**/README.md'
 
 configuration:
 - any:
   - changed-files:
-    - .devcontainer/**/*
-    - .pre-commit-config.yaml
-    - .editorconfig
-    - justfile
+    - any-glob-to-any-file:
+      - .devcontainer/**/*
+      - .pre-commit-config.yaml
+      - .editorconfig
+      - justfile
 
 automation:
 - changed-files:
-  - .github/workflows/**/*automation*.yml
+  - any-glob-to-any-file:
+    - .github/workflows/**/*automation*.yml
 
 deployment:
 - changed-files:
-  - .github/workflows/**/*deployment*.yml
+  - any-glob-to-any-file:
+    - .github/workflows/**/*deployment*.yml
 
 integration:
 - changed-files:
-  - .github/workflows/**/*integration*.yml
+  - any-glob-to-any-file:
+    - .github/workflows/**/*integration*.yml
 
 pages:
 - changed-files:
-  - .github/workflows/**/*pages*.yml
+  - any-glob-to-any-file:
+    - .github/workflows/**/*pages*.yml
 
 security:
 - changed-files:
-  - .github/workflows/**/*security*.yml
+  - any-glob-to-any-file:
+    - .github/workflows/**/*security*.yml
