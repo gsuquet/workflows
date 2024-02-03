@@ -29,10 +29,12 @@ jobs:
 | automation | [comment-pr](./.github/workflows/automation-comment-pr.yml) | Add or update a comment on the pull request |
 | automation | [greeter](./.github/workflows/automation-greeter.yml) | Greetings |
 | automation | [labeler](./.github/workflows/automation-labeler.yml) | Labeler |
+| deployment | [python-pypi](./.github/workflows/deployment-python-pypi.yml) | Deploy a python package to PyPi and GitHub |
 | deployment | [s3](./.github/workflows/deployment-s3.yml) | Upload files to AWS S3 |
 | integration | [commit-validator](./.github/workflows/integration-commit-validator.yml) | Validate commit or PR title format is correct |
 | integration | [linter-pre-commit](./.github/workflows/integration-linter-pre-commit.yml) | Pre-commit |
 | integration | [modification-script](./.github/workflows/integration-modification-script.yml) | Execute script and commit changes to git |
+| integration | [python](./.github/workflows/integration-python.yml) | Unit tests and code format checks for a python project |
 | integration | [integration](./.github/workflows/integration.yml) | Code integration |
 | security | [codeql](./.github/workflows/security-codeql.yml) | Code Quality and Security Analysis |
 | security | [dependencies](./.github/workflows/security-dependencies.yml) | Dependency Scanning |

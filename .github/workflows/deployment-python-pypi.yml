@@ -1,0 +1,66 @@
+name: Deploy a python package to PyPi and GitHub
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'The environment to deploy to'
+        default: 'pypi'
+      environment_url:
+        required: true
+        type: string
+        description: 'The environment URL to deploy to'
+      project_install_command:
+        required: false
+        type: string
+        description: 'The command to install the project'
+        default: 'just install'
+      project_build_command:
+        required: false
+        type: string
+        description: 'The command to build the project'
+        default: 'just build'
+      use_just:
+        default: true
+        description: 'Use just to run commands'
+        required: false
+        type: boolean
+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ inputs.environment_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Semantic release
+        id: semantic-release
+        uses: python-semantic-release@v8.7.2
+
+      - name: Install just
+        if: ${{ inputs.use_just }}
+        run: sudo snap install --edge --classic just
+
+      - name: Install dependencies
+        if: steps.semantic-release.outputs.released == 'true'
+        run: ${{ inputs.project_install_command }}
+
+      - name: Build project
+        if: steps.semantic-release.outputs.released == 'true'
+        run: ${{ inputs.project_build_command }}
+
+      - name: Publish to PyPi
+        if: steps.semantic-release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.8.11
+
+      - name: Publish to GitHub
+        if: steps.semantic-release.outputs.released == 'true'
+        uses: python-semantic-release/upload-to-gh-release@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
