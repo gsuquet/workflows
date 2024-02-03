@@ -1,0 +1,72 @@
+name: Unit tests and code format checks for a python project
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        default: '3.12'
+        description: 'Python version'
+        required: true
+        type: string
+      check_format_command:
+        default: 'just check-format'
+        description: 'Check format command'
+        required: false
+        type: string
+      install_command:
+        default: 'just install'
+        description: 'Install command'
+        required: false
+        type: string
+      test_command:
+        default: 'just test'
+        description: 'Test command'
+        required: false
+        type: string
+      use_just:
+        default: true
+        description: 'Use just to run commands'
+        required: false
+        type: boolean
+
+jobs:
+  code-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install just
+        if: ${{ inputs.use_just == true }}
+        run: sudo snap install --edge --classic just
+
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Install Dependencies
+        run: ${{ inputs.install_command }}
+
+      - name: Check code format
+        run: ${{ inputs.check_format_command }}
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install just
+        if: ${{ inputs.use_just == true }}
+        run: sudo snap install --edge --classic just
+
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Install Dependencies
+        run: ${{ inputs.install_command }}
+
+      - name: Run unit tests
+        run: ${{ inputs.test_command }}
