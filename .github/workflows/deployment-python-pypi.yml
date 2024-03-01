@@ -57,7 +57,7 @@ jobs:
 
       - name: Publish to PyPi
         if: steps.semantic-release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.8.11
+        uses: pypa/gh-action-pypi-publish@v1.8.12
 
       - name: Publish to GitHub
         if: steps.semantic-release.outputs.released == 'true'
