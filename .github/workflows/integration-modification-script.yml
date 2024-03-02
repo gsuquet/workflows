@@ -27,7 +27,8 @@ on:
         type: string
         default: 41898282+github-actions[bot]@users.noreply.github.com
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   execute-script:

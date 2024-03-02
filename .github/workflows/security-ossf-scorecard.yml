@@ -17,17 +17,17 @@ on:
         description: "Token for the scorecard action"
         required: true
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   analysis:
     name: Scorecard analysis
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       security-events: write
       id-token: write
-      contents: read
-      actions: read
 
     steps:
       - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142

@@ -8,13 +8,13 @@ on:
         required: true
         type: string
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   comment:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       pull-requests: write
 
     steps:

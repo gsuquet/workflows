@@ -9,13 +9,13 @@ on:
         type: string
         default: .github/labeler.yml
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   triage:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       pull-requests: write
 
     steps:

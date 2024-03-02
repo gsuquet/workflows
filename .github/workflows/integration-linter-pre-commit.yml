@@ -13,7 +13,8 @@ on:
         required: false
         type: string
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   pre-commit:

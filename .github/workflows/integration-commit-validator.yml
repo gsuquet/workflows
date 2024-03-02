@@ -17,7 +17,8 @@ on:
         type: string
         description: Regex to validate against
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   setup:

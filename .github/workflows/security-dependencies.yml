@@ -14,13 +14,13 @@ on:
         type: string
         default: on-failure
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       pull-requests: write
 
     steps:
