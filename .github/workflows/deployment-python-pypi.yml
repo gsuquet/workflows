@@ -26,6 +26,11 @@ on:
         description: 'Use just to run commands'
         required: false
         type: boolean
+      harden_runner:
+        default: true
+        description: 'Harden the runner'
+        required: false
+        type: boolean
 
 
 jobs:
@@ -36,12 +41,19 @@ jobs:
       name: ${{ inputs.environment }}
       url: ${{ inputs.environment_url }}
     steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+        if: ${{ inputs.harden_runner == true }}
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
       - name: Semantic release
         id: semantic-release
-        uses: python-semantic-release@v8.7.2
+        uses: python-semantic-release/python-semantic-release@c82bd673c30da94a02e039963c8c4c8a51758096
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install just
         if: ${{ inputs.use_just }}
@@ -57,10 +69,10 @@ jobs:
 
       - name: Publish to PyPi
         if: steps.semantic-release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.8.12
+        uses: pypa/gh-action-pypi-publish@e53eb8b103ffcb59469888563dc324e3c8ba6f06
 
       - name: Publish to GitHub
         if: steps.semantic-release.outputs.released == 'true'
-        uses: python-semantic-release/upload-to-gh-release@main
+        uses: python-semantic-release/upload-to-gh-release@0f96c02a48278aff14251e9f1a0d73122a8c638b
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
