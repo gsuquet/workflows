@@ -46,7 +46,8 @@ jobs:
       uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
       if: ${{ inputs.harden_runner != false }}
       with:
-        egress-policy: audit
+        disable-sudo: true
+        egress-policy: block
 
     - name: Check regex for custom format
       id: check_regex
@@ -92,7 +93,8 @@ jobs:
     - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
       if: ${{ inputs.harden_runner != false }}
       with:
-        egress-policy: audit
+        disable-sudo: true
+        egress-policy: block
 
     - name: Validate commit or PR title format
       id: validate
