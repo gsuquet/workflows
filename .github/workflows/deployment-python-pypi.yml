@@ -42,7 +42,8 @@ jobs:
       name: ${{ inputs.environment }}
       url: ${{ inputs.environment_url }}
     steps:
-      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      - name: Harden the runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
         if: ${{ inputs.harden_runner == true }}
         with:
           egress-policy: audit

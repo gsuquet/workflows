@@ -21,6 +21,11 @@ on:
         required: false
         type: string
         description: Regex to validate against
+      harden_runner:
+        description: "Harden the runner"
+        required: false
+        default: true
+        type: boolean
 
 permissions: {}
 
@@ -37,6 +42,12 @@ jobs:
     outputs:
       regex: ${{ steps.set_regex.outputs.regex }}
     steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
     - name: Check regex for custom format
       id: check_regex
       env:
@@ -78,6 +89,11 @@ jobs:
       contents: read
     needs: setup
     steps:
+    - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
     - name: Validate commit or PR title format
       id: validate
       env:

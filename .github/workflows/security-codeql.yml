@@ -11,6 +11,11 @@ on:
         type: string
         required: true
         default: security-and-quality
+      harden_runner:
+        description: "Harden the runner"
+        required: false
+        default: true
+        type: boolean
 
 permissions: {}
 
@@ -23,6 +28,12 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
     - name: Set up matrix
       id: set-matrix
       run: |
@@ -44,6 +55,12 @@ jobs:
         language: ${{ fromJson(needs.setup.outputs.matrix) }}
 
     steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
     - name: Checkout repository
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
