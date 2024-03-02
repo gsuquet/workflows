@@ -1,4 +1,12 @@
 # Centralized Workflows
+<p align="center">
+  <a href="https://github.com/gsuquet/workflows/blob/main/LICENSE" target="_blank" alt="License">
+    <img src="https://img.shields.io/github/license/gsuquet/workflows" alt="License">
+  </a>
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/gsuquet/workflows" alt="openssf scorecard"> 
+    <img src="https://api.securityscorecards.dev/projects/github.com/gsuquet/workflows/badge" alt="openssf score"/> 
+  </a>
+</p>
 
 This repository contains all the github actions workflows used in my projects.
 
@@ -38,4 +46,5 @@ jobs:
 | integration | [integration](./.github/workflows/integration.yml) | Code integration |
 | security | [codeql](./.github/workflows/security-codeql.yml) | Code Quality and Security Analysis |
 | security | [dependencies](./.github/workflows/security-dependencies.yml) | Dependency Scanning |
+| security | [ossf-scorecard](./.github/workflows/security-ossf-scorecard.yml) | Scorecard supply-chain security |
 <!-- WORKFLOWS TABLE END -->
