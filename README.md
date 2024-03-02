@@ -20,13 +20,14 @@ name: Your Workflow
 on:
   pull_request:
 
-permissions:
-  contents: read
-  pull-requests: write
+permissions: {}
 
 jobs:
   your-job:
-    uses: gsuquet/workflows/.github/workflows/automation-labeler.yml@main
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: gsuquet/workflows/.github/workflows/automation-labeler.yml@commit-sha
 ```
 
 ## Available Workflows
