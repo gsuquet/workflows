@@ -12,6 +12,11 @@ on:
         description: Package manager to cache from pip, pipenv and poetry
         required: false
         type: string
+      harden_runner:
+        description: "Harden the runner"
+        required: false
+        default: true
+        type: boolean
 
 permissions: {}
 
@@ -25,6 +30,12 @@ jobs:
     permissions:
       contents: read
     steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
     - name: Checkout repository
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 

@@ -16,6 +16,11 @@ on:
         description: The name of the artifact to download
         required: false
         type: string
+      harden_runner:
+        description: "Harden the runner"
+        required: false
+        default: true
+        type: boolean
     secrets:
       bucket_path:
         required: true
@@ -35,6 +40,12 @@ jobs:
     permissions:
       contents: read
     steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
     - name: Download artifacts
       if: ${{ inputs.artifact_name }}
       uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427

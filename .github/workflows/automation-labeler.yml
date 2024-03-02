@@ -11,6 +11,11 @@ on:
         required: false
         type: string
         default: .github/labeler.yml
+      harden_runner:
+        description: "Harden the runner"
+        required: false
+        default: true
+        type: boolean
 
 permissions: {}
 
@@ -26,6 +31,16 @@ jobs:
       pull-requests: write
 
     steps:
-    - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        disable-sudo: true
+        egress-policy: block
+        allowed-endpoints: >
+          api.github.com:443
+
+    - name: Apply labels
+      uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9
       with:
         configuration-path: ${{ inputs.config_path || '.github/labeler.yml' }}
