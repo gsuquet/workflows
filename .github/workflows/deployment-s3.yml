@@ -27,13 +27,15 @@ on:
         required: true
         description: The AWS secret access key
 
+permissions: read-all
+
 jobs:
   upload:
     runs-on: ubuntu-latest
     steps:
     - name: Download artifacts
       if: ${{ inputs.artifact_name }}
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427
       with:
         name: ${{ inputs.artifact_name }}
         path: ${{ inputs.files_path }}

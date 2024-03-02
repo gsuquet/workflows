@@ -17,6 +17,8 @@ on:
         type: string
         description: Regex to validate against
 
+permissions: read-all
+
 jobs:
   setup:
     runs-on: ubuntu-latest

@@ -9,14 +9,16 @@ on:
         type: string
         default: .github/labeler.yml
 
-permissions:
-  contents: read
-  pull-requests: write
+permissions: read-all
 
 jobs:
   triage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-    - uses: actions/labeler@v5
+    - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9
       with:
         configuration-path: ${{ inputs.config_path }}

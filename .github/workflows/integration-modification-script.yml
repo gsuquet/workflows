@@ -27,15 +27,17 @@ on:
         type: string
         default: 41898282+github-actions[bot]@users.noreply.github.com
 
-permissions:
-  contents: write
+permissions: read-all
 
 jobs:
   execute-script:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       with:
         ref: ${{ inputs.ref }}
 
