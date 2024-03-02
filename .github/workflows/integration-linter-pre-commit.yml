@@ -13,8 +13,7 @@ on:
         required: false
         type: string
 
-permissions:
-  contents: read
+permissions: read-all
 
 concurrency:
   group: pre-commit-${{ github.repository }}-${{ github.ref }}

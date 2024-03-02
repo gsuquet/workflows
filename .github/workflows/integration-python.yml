@@ -27,20 +27,40 @@ on:
         description: 'Use just to run commands'
         required: false
         type: boolean
+      harden_runner:
+        default: true
+        description: 'Harden the runner'
+        required: false
+        type: boolean
+      codecov_slug:
+        description: 'Codecov slug'
+        required: false
+        type: string
+    secrets:
+      codecov_token:
+        description: 'Codecov token'
+        required: false
+
+permissions: read-all
 
 jobs:
   code-format:
     runs-on: ubuntu-latest
     steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+        if: ${{ inputs.harden_runner == true }}
+        with:
+          egress-policy: audit
+
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
       - name: Install just
         if: ${{ inputs.use_just == true }}
         run: sudo snap install --edge --classic just
 
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c
         with:
           python-version: ${{ inputs.python_version }}
 
@@ -53,15 +73,20 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+        if: ${{ inputs.harden_runner == true }}
+        with:
+          egress-policy: audit
+
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
       - name: Install just
         if: ${{ inputs.use_just == true }}
         run: sudo snap install --edge --classic just
 
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c
         with:
           python-version: ${{ inputs.python_version }}
 
@@ -70,3 +95,11 @@ jobs:
 
       - name: Run unit tests
         run: ${{ inputs.test_command }}
+
+      - name: Upload coverage report to Codecov
+        if: ${{ inputs.codecov_slug != null }}
+        uses: codecov/codecov-action@54bcd8715eee62d40e33596ef5e8f0f48dbbccab
+        with:
+          token: ${{ secrets.codecov_token }}
+          slug: ${{ inputs.codecov_slug }}
+

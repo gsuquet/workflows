@@ -27,8 +27,7 @@ on:
         required: true
         description: The AWS secret access key
 
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   upload:

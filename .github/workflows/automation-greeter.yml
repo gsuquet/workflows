@@ -14,8 +14,7 @@ on:
         type: string
         default: Thanks for the PR!
 
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   greeting:
