@@ -1,6 +1,9 @@
 name: Labeler
 
 on:
+  pull_request:
+    types: [opened, synchronize, edited]
+
   workflow_call:
     inputs:
       config_path:
@@ -12,6 +15,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: labeler-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   triage:
     runs-on: ubuntu-latest
@@ -21,4 +28,4 @@ jobs:
     steps:
     - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9
       with:
-        configuration-path: ${{ inputs.config_path }}
+        configuration-path: ${{ inputs.config_path || '.github/labeler.yml' }}
