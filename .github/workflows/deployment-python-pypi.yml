@@ -32,7 +32,7 @@ on:
         required: false
         type: boolean
 
-permissions: read-all
+permissions: {}
 
 jobs:
   release:

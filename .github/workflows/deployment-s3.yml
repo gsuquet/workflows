@@ -27,11 +27,13 @@ on:
         required: true
         description: The AWS secret access key
 
-permissions: read-all
+permissions: {}
 
 jobs:
   upload:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
     - name: Download artifacts
       if: ${{ inputs.artifact_name }}

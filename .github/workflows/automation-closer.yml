@@ -2,12 +2,12 @@ name: Close stale issues and PRs
 on:
   workflow_call:
 
-permissions: read-all
+permissions: {}
 
 jobs:
   stale:
     permissions:
-      contents: write     # only for delete-branch option
+      contents: write
       issues: write
       pull-requests: write
     runs-on: ubuntu-latest
@@ -26,8 +26,10 @@ jobs:
         days-before-pr-close: 10
         exempt-all-issue-milestones: true
         exempt-all-pr-milestones: true
+
   duplicate:
     permissions:
+      contents: read
       issues: write
       pull-requests: write
     runs-on: ubuntu-latest

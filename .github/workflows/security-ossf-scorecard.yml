@@ -17,7 +17,7 @@ on:
         description: "Token for the scorecard action"
         required: true
 
-permissions: read-all
+permissions: {}
 
 jobs:
   analysis:
@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
+      contents: read
       security-events: write
       id-token: write
 

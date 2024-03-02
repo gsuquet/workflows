@@ -32,7 +32,7 @@ on:
         type: string
         default: 41898282+github-actions[bot]@users.noreply.github.com
 
-permissions: read-all
+permissions: {}
 
 concurrency:
   group: modification-script-${{ github.repository }}-${{ github.ref }}
