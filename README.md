@@ -1,4 +1,12 @@
 # Centralized Workflows
+<p align="center">
+  <a href="https://github.com/gsuquet/workflows/blob/main/LICENSE" target="_blank" alt="License">
+    <img src="https://img.shields.io/github/license/gsuquet/workflows" alt="License">
+  </a>
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/gsuquet/workflows" alt="openssf scorecard"> 
+    <img src="https://api.securityscorecards.dev/projects/github.com/gsuquet/workflows/badge" alt="openssf score"/> 
+  </a>
+</p>
 
 This repository contains all the github actions workflows used in my projects.
 
