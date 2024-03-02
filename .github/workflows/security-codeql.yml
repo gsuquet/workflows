@@ -12,8 +12,7 @@ on:
         required: true
         default: security-and-quality
 
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   setup:

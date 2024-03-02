@@ -32,8 +32,7 @@ on:
         type: string
         default: 41898282+github-actions[bot]@users.noreply.github.com
 
-permissions:
-  contents: read
+permissions: read-all
 
 concurrency:
   group: modification-script-${{ github.repository }}-${{ github.ref }}
@@ -43,12 +42,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
+    env:
+      BRANCH: ${{ inputs.ref || github.head_ref }}
     steps:
     - name: Checkout
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       with:
-        ref: ${{ inputs.ref || github.head_ref }}
+        ref: ${{ env.BRANCH }}
 
     - name: Run script
       run: |
@@ -67,4 +67,4 @@ jobs:
         git config --local user.email "${{ inputs.commit_email || '41898282+github-actions[bot]@users.noreply.github.com'}}"
         git add .
         git commit -m "${{ inputs.commit_message || ':memo: doc: Update workflow list in README.md'}}"
-        git push origin ${{ inputs.ref || github.head_ref }}
+        git push origin "${{ env.BRANCH }}"

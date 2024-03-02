@@ -41,6 +41,8 @@ on:
         description: 'Codecov token'
         required: false
 
+permissions: read-all
+
 jobs:
   code-format:
     runs-on: ubuntu-latest

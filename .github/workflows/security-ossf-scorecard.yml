@@ -17,8 +17,7 @@ on:
         description: "Token for the scorecard action"
         required: true
 
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   analysis:
