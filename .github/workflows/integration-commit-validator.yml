@@ -1,10 +1,15 @@
 name: Validate commit or PR title format is correct
 
 on:
+  pull_request:
+    types: [opened, synchronize, edited]
+    branches:
+    - main
+
   workflow_call:
     inputs:
       commit_or_pr_title:
-        required: true
+        required: false
         type: string
         description: Commit or PR title to validate
       format:
@@ -17,8 +22,16 @@ on:
         type: string
         description: Regex to validate against
 
+permissions:
+  contents: read
+
+concurrency:
+  group: commit-pr-title-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   setup:
+    if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
     runs-on: ubuntu-latest
     outputs:
       regex: ${{ steps.set_regex.outputs.regex }}
@@ -31,7 +44,7 @@ jobs:
             echo "# Validation failed"
             echo ":rotating_light: Missing regex for custom format" >> $GITHUB_STEP_SUMMARY
             echo "Custom format specified but no regex provided" >> $GITHUB_STEP_SUMMARY
-            echo "Please provide a regex to validate `${{ inputs.commit_or_pr_title }}`" >> $GITHUB_STEP_SUMMARY
+            echo "Please provide a regex to validate `${{ inputs.commit_or_pr_title || github.event.pull_request.title }}`" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
         fi
@@ -41,7 +54,7 @@ jobs:
       run: |
         if [[ "${{ inputs.format }}" == "conventional" ]]; then
           echo "regex=^[a-z_]+(!)?(: .*)?$"  >> $GITHUB_OUTPUT
-        elif [[ "${{ inputs.format }}" == "gitmoji" ]]; then
+        elif [[ "${{ inputs.format || 'gitmoji' }}" == "gitmoji" ]]; then
           echo "regex=^:[a-z_]+: [a-z_]+(!)?(: .*)?$" >> $GITHUB_OUTPUT
         elif [[ "${{ inputs.format }}" == "custom" ]]; then
           echo "regex=${{ inputs.regex }}" >> $GITHUB_OUTPUT
@@ -56,19 +69,20 @@ jobs:
         fi
 
   validate:
+    if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
     runs-on: ubuntu-latest
     needs: setup
     steps:
     - name: Validate commit or PR title format
       id: validate
       run: |
-        if echo "${{ inputs.commit_or_pr_title }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
+        if echo "${{  inputs.commit_or_pr_title || github.event.pull_request.title  }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
           echo "# Validation passed"
           echo ":white_check_mark: Correct format" >> $GITHUB_STEP_SUMMARY
-          echo "\`${{ inputs.commit_or_pr_title }}\` matches the \`${{ inputs.format }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{  inputs.commit_or_pr_title || github.event.pull_request.title  }}\` matches the \`${{ inputs.format || 'gitmoji' }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
         else
           echo "# Validation failed"
           echo ":rotating_light: Incorrect format" >> $GITHUB_STEP_SUMMARY
-          echo "\`${{ inputs.commit_or_pr_title }}\` does not match the \`${{ inputs.format }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{  inputs.commit_or_pr_title || github.event.pull_request.title  }}\` does not match the \`${{ inputs.format || 'gitmoji' }}\` format when analyzed using the following regex : \`${{ needs.setup.outputs.regex }}\`" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi

@@ -1,6 +1,11 @@
 name: Execute script and commit changes to git
 
 on:
+  pull_request:
+    types: [opened, synchronize, edited]
+    branches:
+    - main
+
   workflow_call:
     inputs:
       script_path:
@@ -28,21 +33,27 @@ on:
         default: 41898282+github-actions[bot]@users.noreply.github.com
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: modification-script-${{ github.repository }}-${{ github.ref }}
 
 jobs:
   execute-script:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       with:
-        ref: ${{ inputs.ref }}
+        ref: ${{ inputs.ref || github.head_ref }}
 
     - name: Run script
       run: |
-        chmod +x ${{ inputs.script_path }}
-        ${{ inputs.script_path }}
+        chmod +x ${{ inputs.script_path || './scripts/generate_workflows_table.sh' }}
+        ${{ inputs.script_path || './scripts/generate_workflows_table.sh'}}
 
     - name: Detect changes
       id: detect_changes
@@ -52,8 +63,8 @@ jobs:
     - name: Commit changes
       if: steps.detect_changes.outputs.changed == 'true'
       run: |
-        git config --local user.name "${{ inputs.commit_author }}"
-        git config --local user.email "${{ inputs.commit_email }}"
+        git config --local user.name "${{ inputs.commit_author || 'GitHub Action' }}"
+        git config --local user.email "${{ inputs.commit_email || '41898282+github-actions[bot]@users.noreply.github.com'}}"
         git add .
-        git commit -m "${{ inputs.commit_message }}"
-        git push origin ${{ inputs.ref }}
+        git commit -m "${{ inputs.commit_message || ':memo: doc: Update workflow list in README.md'}}"
+        git push origin ${{ inputs.ref || github.head_ref }}
