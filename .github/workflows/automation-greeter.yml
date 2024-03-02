@@ -14,12 +14,13 @@ on:
         type: string
         default: Thanks for the PR!
 
-permissions: read-all
+permissions: {}
 
 jobs:
   greeting:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
       pull-requests: write
     steps:

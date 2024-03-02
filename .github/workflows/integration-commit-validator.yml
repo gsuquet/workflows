@@ -22,7 +22,7 @@ on:
         type: string
         description: Regex to validate against
 
-permissions: read-all
+permissions: {}
 
 concurrency:
   group: commit-pr-title-${{ github.repository }}-${{ github.ref }}
@@ -32,6 +32,8 @@ jobs:
   setup:
     if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       regex: ${{ steps.set_regex.outputs.regex }}
     steps:
@@ -72,6 +74,8 @@ jobs:
   validate:
     if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: setup
     steps:
     - name: Validate commit or PR title format

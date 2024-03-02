@@ -41,11 +41,13 @@ on:
         description: 'Codecov token'
         required: false
 
-permissions: read-all
+permissions: {}
 
 jobs:
   code-format:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
         if: ${{ inputs.harden_runner == true }}
@@ -72,6 +74,8 @@ jobs:
 
   unit-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
         if: ${{ inputs.harden_runner == true }}

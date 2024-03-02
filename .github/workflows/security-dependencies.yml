@@ -19,7 +19,7 @@ on:
         type: string
         default: on-failure
 
-permissions: read-all
+permissions: {}
 
 concurrency:
   group: dependency-review-${{ github.repository }}-${{ github.ref }}
@@ -29,6 +29,7 @@ jobs:
   dependency-review:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
 
     steps:

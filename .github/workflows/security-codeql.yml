@@ -12,12 +12,14 @@ on:
         required: true
         default: security-and-quality
 
-permissions: read-all
+permissions: {}
 
 jobs:
   setup:
     name: Setup
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -33,6 +35,7 @@ jobs:
     needs: setup
     permissions:
       actions: read
+      contents: read
       security-events: write
 
     strategy:
