@@ -46,4 +46,5 @@ jobs:
 | integration | [integration](./.github/workflows/integration.yml) | Code integration |
 | security | [codeql](./.github/workflows/security-codeql.yml) | Code Quality and Security Analysis |
 | security | [dependencies](./.github/workflows/security-dependencies.yml) | Dependency Scanning |
+| security | [ossf-scorecard](./.github/workflows/security-ossf-scorecard.yml) | Scorecard supply-chain security |
 <!-- WORKFLOWS TABLE END -->
