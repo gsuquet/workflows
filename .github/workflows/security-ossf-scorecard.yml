@@ -41,7 +41,7 @@ jobs:
         if: ${{ inputs.harden_runner != false }}
         with:
           disable-sudo: true
-          egress-policy: block
+          egress-policy: audit
           allowed-endpoints: >
             api.github.com:443
             api.osv.dev:443
@@ -53,6 +53,7 @@ jobs:
             oss-fuzz-build-logs.storage.googleapis.com:443
             rekor.sigstore.dev:443
             sigstore-tuf-root.storage.googleapis.com:443
+            tuf-repo-cdn.sigstore.dev:443
             www.bestpractices.dev:443
 
       - name: Checkout code
