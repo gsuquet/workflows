@@ -1,0 +1,52 @@
+name: Code analysis using Codacy
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to analyze'
+        required: true
+        default: 'main'
+        type: string
+      harden_runner:
+        description: 'Harden the runner'
+        required: false
+        default: true
+        type: boolean
+  workflow_call:
+    inputs:
+      harden_runner:
+        description: 'Harden the runner'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  codacy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
+    - name: Checkout repository
+      uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      with:
+        ref: ${{ github.event.inputs.branch || github.ref }}
+
+    - name: Run Codacy Analysis CLI
+      uses: codacy/codacy-analysis-cli-action@33d455949345bddfdb845fba76b57b70cc83754b
+      with:
+        output: codacy.sarif
+        format: sarif
+        gh-code-scanning-compat: true
+
+    - name: Upload results to code-scanning
+      uses: github/codeql-action/upload-sarif@3ab4101902695724f9365a384f86c1074d94e18c
+      with:
+        sarif_file: codacy.sarif
