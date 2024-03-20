@@ -25,6 +25,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ossf-scorecard-${{ github.repository }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   analysis:
     name: Scorecard analysis

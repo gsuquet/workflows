@@ -1,8 +1,12 @@
+# GitHub Actions - Summary of pre-commit checks
+
 ## :x: Pre-commit checks failed :x:
 You can reproduce this behavior locally by running :
+
 ```bash
 pre-commit run --all-files --show-diff-on-failure
 ```
+
 Please fix the errors and commit again.
 If you think this is a false positive, please open an issue on the [GitHub repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=bug%2Cto+sort&projects=&template=bug_report.yml).
 
