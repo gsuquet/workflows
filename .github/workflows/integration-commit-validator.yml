@@ -60,7 +60,7 @@ jobs:
               printf "# Validation failed\n"
               printf ":rotating_light: Missing regex for custom format\n"
               printf "Custom format specified but no regex provided\n"
-              printf "Please provide a regex to validate `\"$INPUT_TO_VALIDATE\"`\n"
+              printf "Please provide a regex to validate \"$INPUT_TO_VALIDATE\"\n"
             } >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
@@ -79,7 +79,7 @@ jobs:
           {
             printf "# Validation failed\n"
             printf ":rotating_light: The specified format is invalid\n"
-            printf "The format `\"${{ inputs.format }}\"` is not supported yet\n"
+            printf "The format \"${{ inputs.format }}\" is not supported yet\n"
             printf "Valid formats are: conventional, gitmoji and custom\n"
             printf "Custom format requires a regex to be provided\n"
             printf "Please open an issue on the [workflows repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=enhancement%2Cto+sort&projects=&template=feature.yml) with the corresponding regex to add support for `${{ inputs.format }}`\n"
@@ -109,13 +109,13 @@ jobs:
           {
             printf "# Validation passed\n"
             printf ":white_check_mark: Correct format\n"
-            printf "`\"$INPUT_TO_VALIDATE\"` matches the `\"${{ inputs.format || 'gitmoji' }}\"` format when analyzed using the following regex : `\"${{ needs.setup.outputs.regex }}\"`\n"
+            printf "\"$INPUT_TO_VALIDATE\" matches the \"${{ inputs.format || 'gitmoji' }}\" format when analyzed using the following regex : \"${{ needs.setup.outputs.regex }}\"\n"
           } >> $GITHUB_STEP_SUMMARY
         else
           {
             printf "# Validation failed\n"
             printf ":rotating_light: Incorrect format\n"
-            printf "`\"$INPUT_TO_VALIDATE\"` does not match the `\"${{ inputs.format || 'gitmoji' }}\"` format when analyzed using the following regex : `\"${{ needs.setup.outputs.regex }}\"`\n"
+            printf "\"$INPUT_TO_VALIDATE\" does not match the \"${{ inputs.format || 'gitmoji' }}\" format when analyzed using the following regex : \"${{ needs.setup.outputs.regex }}\"\n"
           } >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
