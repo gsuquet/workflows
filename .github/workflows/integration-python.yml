@@ -43,6 +43,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: integration-python-${{ github.repository }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   code-format:
     runs-on: ubuntu-latest
