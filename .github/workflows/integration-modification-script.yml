@@ -46,7 +46,7 @@ jobs:
   execute-script:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     env:
       BRANCH: ${{ inputs.ref || github.head_ref }}
     steps:

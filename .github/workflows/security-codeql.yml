@@ -1,9 +1,9 @@
-name: Code Quality and Security Analysis
+name: Code Quality and Security Analysis with CodeQL
 on:
   workflow_call:
     inputs:
       languages:
-        description: 'The languages to analyze (comma-separated). For example: `go, java`'
+        description: 'The languages to analyze (comma-separated). For example: `go,java`'
         type: string
         required: true
       queries:
@@ -19,31 +19,15 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: codeql-${{ github.repository }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
-  setup:
-    name: Setup
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-    - name: Harden the runner
-      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
-      if: ${{ inputs.harden_runner != false }}
-      with:
-        egress-policy: audit
-
-    - name: Set up matrix
-      id: set-matrix
-      run: |
-        echo "::set-output name=matrix::$(echo "[${{ inputs.languages }}]")"
-
   analyze:
     name: Analyze
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
-    needs: setup
     permissions:
       actions: read
       contents: read
@@ -52,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ${{ fromJson(needs.setup.outputs.matrix) }}
+        language: ${{ fromJson(inputs.languages) }}
 
     steps:
     - name: Harden the runner
