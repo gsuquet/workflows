@@ -4,18 +4,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to analyze'
-        required: true
-        default: 'main'
-        type: string
-      harden_runner:
-        description: 'Harden the runner'
-        required: false
-        default: true
-        type: boolean
+  workflow_dispatch: {}
   workflow_call:
     inputs:
       harden_runner:
@@ -24,9 +13,17 @@ on:
         default: true
         type: boolean
 
+permissions: {}
+
 jobs:
   codacy:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+
     steps:
     - name: Harden the runner
       uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142
@@ -36,8 +33,6 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
-      with:
-        ref: ${{ github.event.inputs.branch || github.ref }}
 
     - name: Run Codacy Analysis CLI
       uses: codacy/codacy-analysis-cli-action@33d455949345bddfdb845fba76b57b70cc83754b
