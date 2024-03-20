@@ -44,7 +44,8 @@ jobs:
 | integration | [linter-pre-commit](./.github/workflows/integration-linter-pre-commit.yml) | Pre-commit |
 | integration | [modification-script](./.github/workflows/integration-modification-script.yml) | Execute script and commit changes to git |
 | integration | [python](./.github/workflows/integration-python.yml) | Unit tests and code format checks for a python project |
-| security | [codeql](./.github/workflows/security-codeql.yml) | Code Quality and Security Analysis |
+| security | [codacy](./.github/workflows/security-codacy.yml) | Code analysis using Codacy |
+| security | [codeql](./.github/workflows/security-codeql.yml) | Code Quality and Security Analysis with CodeQL |
 | security | [dependencies](./.github/workflows/security-dependencies.yml) | Dependency Scanning |
 | security | [ossf-scorecard](./.github/workflows/security-ossf-scorecard.yml) | Scorecard supply-chain security |
 <!-- WORKFLOWS TABLE END -->
