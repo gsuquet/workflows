@@ -1,0 +1,113 @@
+name: Format, lint, and validate Terraform code
+on:
+  workflow_call:
+    inputs:
+      tf_version:
+        description: 'Terraform version to use, e.g. `1.5.7`, `1.8.3`'
+        required: false
+        type: string
+      tofu_version:
+        description: 'OpenTofu version to use, e.g. `1.6.2`, `1.7.1`'
+        required: false
+        type: string
+      tg_version:
+        description: 'Terragrunt version to use, e.g. `0.57.13`, `0.58.7`'
+        required: false
+        type: string
+      harden_runner:
+        default: true
+        description: 'Harden the runner'
+        required: false
+        type: boolean
+
+permissions: {}
+
+concurrency:
+  group: integration-terraform-${{ github.repository }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@a4aa98b93cab29d9b1101a6143fb8bce00e2eac4
+        if: ${{ inputs.harden_runner == true }}
+
+      - name: Checkout repository
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+
+      - name: Install Terraform
+        if: ${{ inputs.tf_version != null && inputs.tg_version == null }}
+        id: install-terraform
+        uses: hashicorp/setup-terraform@651471c36a6092792c552e8b1bef71e592b462d8
+        with:
+          terraform_version: ${{ inputs.tf_version }}
+
+      - name: Install opentofu
+        if: ${{ inputs.tofu_version != null && inputs.tg_version == null}}
+        id: install-opentofu
+        uses: opentofu/setup-opentofu@ae80d4ecaab946d8f5ff18397fbf6d0686c6d46a
+        with:
+          tofu_version: ${{ inputs.tofu_version }}
+
+      - name: Check terragrunt HCL formatting
+        if: ${{ inputs.tg_version != null }}
+        id: terragrunt-fmt
+        uses: gruntwork-io/terragrunt-action@a0105361e24c442f079b67511ef3e4585a82fb02
+        with:
+          tf_version: ${{ inputs.tf_version }}
+          tofu_version: ${{ inputs.tofu_version }}
+          tg_version: ${{ inputs.tg_version }}
+          tg_dir: '.'
+          tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
+
+      - name: Get CLI to use
+        if: ${{ inputs.tg_version == null }}
+        id: get-cli
+        run: |
+          if [ -n "${{ inputs.tf_version }}" ]; then
+            echo "Using Terraform CLI"
+            echo "cli=terraform" >> $GITHUB_OUTPUT
+          else
+            echo "Using OpenTofu CLI"
+            echo "cli=tofu" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check Terraform formatting
+        if: ${{ inputs.tg_version == null }}
+        id: fmt
+        run: |
+          ${{ steps.get-cli.outputs.cli }} fmt -check -diff -recursive
+        continue-on-error: true
+
+      - name: Initialize Terraform
+        if: ${{ inputs.tg_version == null }}
+        id: init
+        run: |
+          ${{ steps.get-cli.outputs.cli }} init -backend=false
+
+      - name: Validate Terraform
+        if: ${{ inputs.tg_version == null }}
+        id: validate
+        run: |
+          ${{ steps.get-cli.outputs.cli }} validate -no-color
+
+      - name: Comment on Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const tool = ${{ steps.get-cli.outputs.cli }}.replace('terraform', 'Terraform').replace('tofu', 'OpenTofu')
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes(tool)  && comment.body.includes('Format and Style')
+            })
+
