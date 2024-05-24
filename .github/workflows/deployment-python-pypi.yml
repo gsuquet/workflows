@@ -79,6 +79,6 @@ jobs:
 
       - name: Publish to GitHub
         if: steps.semantic-release.outputs.released == 'true'
-        uses: python-semantic-release/upload-to-gh-release@0f96c02a48278aff14251e9f1a0d73122a8c638b
+        uses: python-semantic-release/upload-to-gh-release@cd7c5a2a25d118881aa9058d225e29427e640127
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
