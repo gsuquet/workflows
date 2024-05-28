@@ -113,7 +113,7 @@ jobs:
 
       - name: Upload coverage report to Codecov
         if: ${{ inputs.codecov_slug != null }}
-        uses: codecov/codecov-action@5ecb98a3c6b747ed38dc09f787459979aebb39be
+        uses: codecov/codecov-action@125fc84a9a348dbcf27191600683ec096ec9021c
         with:
           token: ${{ secrets.codecov_token }}
           slug: ${{ inputs.codecov_slug }}
