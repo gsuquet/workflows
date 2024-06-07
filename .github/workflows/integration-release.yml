@@ -1,0 +1,50 @@
+name: Semantic release
+on:
+  workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      harden_runner:
+        description: 'Harden the runner'
+        required: false
+        default: true
+        type: boolean
+
+permissions: {}
+
+concurrency:
+  group: semantic-release-${{ github.repository }}-${{ github.head_ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+    - name: Harden the runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10
+      if: ${{ inputs.harden_runner != false }}
+      with:
+        egress-policy: audit
+
+    - name: Checkout repository
+      uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+
+    - name: Setup Node.js
+      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
+      with:
+        node-version: "lts/*"
+
+    - name: Install dependencies
+      run: npm clean-install
+
+    - name: Verify the integrity and authenticity of the dependencies
+      run: npm audit signatures
+
+    - name: Run semantic release
+      run: npx semantic-release
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
