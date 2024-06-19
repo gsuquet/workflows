@@ -76,9 +76,9 @@ jobs:
       id: set_regex
       run: |
         if [[ "${{ env.FORMAT }}" == "conventional" ]]; then
-          printf "regex=^[a-z_]+(!)?(: .*)?$\n"  >> $GITHUB_OUTPUT
+          printf "regex=^[a-z_]+(\([^\)]*\))?(!)?(: .*)?$\n"  >> $GITHUB_OUTPUT
         elif [[ "${{ env.FORMAT }}" == "gitmoji" ]]; then
-          printf "regex=^:[a-z_]+: [a-z_]+(!)?(: .*)?$\n" >> $GITHUB_OUTPUT
+          printf "regex=^:[a-z_]+: [a-z_]+(\([^\)]*\))?(!)?(: .*)?$\n" >> $GITHUB_OUTPUT
         elif [[ "${{ env.FORMAT }}" == "custom" ]]; then
           printf "regex=\"${{ env.FORMAT }}\"\n" >> $GITHUB_OUTPUT
         else
