@@ -1,6 +1,10 @@
 name: Validate commit or PR title format is correct
 
 on:
+  push:
+    paths:
+      - '.github/workflows/integration-commit-validator.yml'
+
   pull_request:
     types: [opened, synchronize, edited]
     branches:
@@ -33,6 +37,10 @@ concurrency:
   group: commit-pr-title-${{ github.repository }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  INPUT_TO_VALIDATE: ${{ inputs.commit_or_pr_title || github.event.pull_request.title || github.event.head_commit.message || ''}}
+  FORMAT: ${{ inputs.format || 'conventional' }}
+
 jobs:
   setup:
     if: ${{ github.actor != 'dependabot[bot]'  && github.actor != 'allcontributors[bot]' }}
@@ -51,16 +59,14 @@ jobs:
 
     - name: Check regex for custom format
       id: check_regex
-      env:
-        INPUT_TO_VALIDATE: ${{ inputs.commit_or_pr_title || github.event.pull_request.title }}
       run: |
-        if [[ "${{ inputs.format }}" == "custom" ]]; then
+        if [[ "${{ env.FORMAT }}" == "custom" ]]; then
           if [[ -z "${{ inputs.regex }}" ]]; then
             {
               printf "# Validation failed\n"
               printf ":rotating_light: Missing regex for custom format\n"
               printf "Custom format specified but no regex provided\n"
-              printf "Please provide a regex to validate \"$INPUT_TO_VALIDATE\"\n"
+              printf "Please provide a regex to validate \"${{ env.INPUT_TO_VALIDATE }}\"\n"
             } >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
@@ -69,17 +75,17 @@ jobs:
     - name: Set regex to use
       id: set_regex
       run: |
-        if [[ "${{ inputs.format }}" == "conventional" ]]; then
-          printf "regex=^[a-z_]+(!)?(: .*)?$\n"  >> $GITHUB_OUTPUT
-        elif [[ "${{ inputs.format || 'gitmoji' }}" == "gitmoji" ]]; then
-          printf "regex=^:[a-z_]+: [a-z_]+(!)?(: .*)?$\n" >> $GITHUB_OUTPUT
-        elif [[ "${{ inputs.format }}" == "custom" ]]; then
-          printf "regex=\"${{ inputs.regex }}\"\n" >> $GITHUB_OUTPUT
+        if [[ "${{ env.FORMAT }}" == "conventional" ]]; then
+          printf "regex=^[a-z_]+(\([^\)]*\))?(!)?(: .*)?$\n"  >> $GITHUB_OUTPUT
+        elif [[ "${{ env.FORMAT }}" == "gitmoji" ]]; then
+          printf "regex=^:[a-z_]+: [a-z_]+(\([^\)]*\))?(!)?(: .*)?$\n" >> $GITHUB_OUTPUT
+        elif [[ "${{ env.FORMAT }}" == "custom" ]]; then
+          printf "regex=\"${{ env.FORMAT }}\"\n" >> $GITHUB_OUTPUT
         else
           {
             printf "# Validation failed\n"
             printf ":rotating_light: The specified format is invalid\n"
-            printf "The format \"${{ inputs.format }}\" is not supported yet\n"
+            printf "The format \"${{ env.FORMAT }}\" is not supported yet\n"
             printf "Valid formats are: conventional, gitmoji and custom\n"
             printf "Custom format requires a regex to be provided\n"
             printf "Please open an issue on the [workflows repository](https://github.com/gsuquet/workflows/issues/new?assignees=&labels=enhancement%2Cto+sort&projects=&template=feature.yml) with the corresponding regex to add support for `${{ inputs.format }}`\n"
@@ -102,20 +108,18 @@ jobs:
 
     - name: Validate commit or PR title format
       id: validate
-      env:
-        INPUT_TO_VALIDATE: ${{ inputs.commit_or_pr_title || github.event.pull_request.title }}
       run: |
-        if echo "$INPUT_TO_VALIDATE" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
+        if echo "${{ env.INPUT_TO_VALIDATE }}" | grep -Pq "${{ needs.setup.outputs.regex }}"; then
           {
             printf "# Validation passed\n"
             printf ":white_check_mark: Correct format\n"
-            printf "\"$INPUT_TO_VALIDATE\" matches the \"${{ inputs.format || 'gitmoji' }}\" format when analyzed using the following regex : \"${{ needs.setup.outputs.regex }}\"\n"
+            printf "\"${{ env.INPUT_TO_VALIDATE }}\" matches the \"${{ env.FORMAT || 'gitmoji' }}\" format when analyzed using the following regex : \"${{ needs.setup.outputs.regex }}\"\n"
           } >> $GITHUB_STEP_SUMMARY
         else
           {
             printf "# Validation failed\n"
             printf ":rotating_light: Incorrect format\n"
-            printf "\"$INPUT_TO_VALIDATE\" does not match the \"${{ inputs.format || 'gitmoji' }}\" format when analyzed using the following regex : \"${{ needs.setup.outputs.regex }}\"\n"
+            printf "\"${{ env.INPUT_TO_VALIDATE }}\" does not match the \"${{ env.FORMAT }}\" format when analyzed using the following regex : \"${{ needs.setup.outputs.regex }}\"\n"
           } >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
