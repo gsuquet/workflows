@@ -4,14 +4,16 @@
 	"name": "GitHub Centralized Workflows",
 
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/python@sha256:d79353264c02d921f736cb31a8a1c1a3a1498f2e5e7097c52ddaf1a0a92fb6ec",
+	"image": "mcr.microsoft.com/devcontainers/python:1.1.11-3.12-bookworm",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
     "features": {
-		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {
-			"version": "latest"
-		},
-		"ghcr.io/guiyomh/features/just:0.1.0": {}
+		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {},
+		"ghcr.io/guiyomh/features/just:0.1.0": {},
+		"ghcr.io/devcontainers-contrib/features/act:1": {},
+		"ghcr.io/devcontainers-contrib/features/actionlint:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/guiyomh/features/just:0": {}
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

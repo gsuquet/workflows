@@ -5,12 +5,12 @@ on:
     inputs:
       issue_message:
         description: The message to post on user's first issue
-        required: true
+        required: false
         type: string
         default: Welcome to the repo!
       pr_message:
         description: The message to post on user's first PR
-        required: true
+        required: false
         type: string
         default: Thanks for the PR!
 
