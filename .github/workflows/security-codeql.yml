@@ -40,17 +40,17 @@ jobs:
 
     steps:
     - name: Harden the runner
-      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       if: ${{ inputs.harden_runner != false }}
       with:
         egress-policy: audit
 
     - name: Checkout repository
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@23acc5c183826b7a8a97bce3cecc52db901f8251
+      uses: github/codeql-action/init@23acc5c183826b7a8a97bce3cecc52db901f8251 # v3.25.10
       with:
         languages: ${{ matrix.language }}
 
@@ -58,6 +58,6 @@ jobs:
         queries: ${{ inputs.queries }}
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@23acc5c183826b7a8a97bce3cecc52db901f8251
+      uses: github/codeql-action/analyze@23acc5c183826b7a8a97bce3cecc52db901f8251 # v3.25.10
       with:
         category: /language:${{matrix.language}}

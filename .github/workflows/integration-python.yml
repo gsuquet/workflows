@@ -56,20 +56,20 @@ jobs:
       matrix:
         python-version: ${{ fromJSON(inputs.python_version) }}
     steps:
-      - uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6
+      - uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
         if: ${{ inputs.harden_runner == true }}
         with:
           egress-policy: audit
 
       - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Install just
         if: ${{ inputs.use_just == true }}
         run: sudo snap install --edge --classic just
 
       - name: Install python
-        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -88,20 +88,20 @@ jobs:
         python-version: ${{ fromJSON(inputs.python_version) }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
         if: ${{ inputs.harden_runner == true }}
         with:
           egress-policy: audit
 
       - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Install just
         if: ${{ inputs.use_just == true }}
         run: sudo snap install --edge --classic just
 
       - name: Install python
-        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -113,7 +113,7 @@ jobs:
 
       - name: Upload coverage report to Codecov
         if: ${{ inputs.codecov_slug != null }}
-        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
         with:
           token: ${{ secrets.codecov_token }}
           slug: ${{ inputs.codecov_slug }}
