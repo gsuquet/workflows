@@ -47,17 +47,17 @@ jobs:
       url: ${{ inputs.environment_url }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
         if: ${{ inputs.harden_runner == true }}
         with:
           egress-policy: audit
 
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Semantic release
         id: semantic-release
-        uses: python-semantic-release/python-semantic-release@0f4c0b152e115c266c7a838c8e3997483a44de64
+        uses: python-semantic-release/python-semantic-release@0f4c0b152e115c266c7a838c8e3997483a44de64 # v9.8.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -75,10 +75,10 @@ jobs:
 
       - name: Publish to PyPi
         if: steps.semantic-release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@ec4db0b4ddc65acdf4bff5fa45ac92d78b56bdf0
+        uses: pypa/gh-action-pypi-publish@ec4db0b4ddc65acdf4bff5fa45ac92d78b56bdf0 # v1.9.0
 
       - name: Publish to GitHub
         if: steps.semantic-release.outputs.released == 'true'
-        uses: python-semantic-release/upload-to-gh-release@cd7c5a2a25d118881aa9058d225e29427e640127
+        uses: python-semantic-release/upload-to-gh-release@d69c4eec4b072c8a9f80ebd1b1d03ede5a4bc625 # v9.8.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
