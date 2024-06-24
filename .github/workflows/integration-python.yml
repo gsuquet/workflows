@@ -48,13 +48,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      python-versions: ${{ steps.create-matrix.outputs.versions }}
+    steps:
+      - name: Create python versions matrix
+        id: create-matrix
+        run: |
+          python-versions="[\"${{ inputs.python_version }} | sed "s/,/\",\"/g")\"]"
+          echo "versions=$python-versions" >> $GITHUB_OUTPUT
+
   code-format:
     runs-on: ubuntu-latest
+    needs: [setup]
     permissions:
       contents: read
     strategy:
       matrix:
-        python-version: ${{ fromJSON(inputs.python_version) }}
+        python-version: ${{ fromJSON(needs.setup.outputs.python-versions) }}
     steps:
       - uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
         if: ${{ inputs.harden_runner == true }}
@@ -81,11 +93,12 @@ jobs:
 
   unit-tests:
     runs-on: ubuntu-latest
+    needs: [setup]
     permissions:
       contents: read
     strategy:
       matrix:
-        python-version: ${{ fromJSON(inputs.python_version) }}
+        python-version: ${{ fromJSON(needs.setup.outputs.python-versions) }}
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
