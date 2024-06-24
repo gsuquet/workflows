@@ -27,7 +27,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: gsuquet/workflows/.github/workflows/automation-labeler.yml@commit-sha
+    uses: gsuquet/workflows/.github/workflows/automation-labeler.yml@7e887cf4d10f445ae67ba60549cc1e3c59c8adc9 # v1.2.3
 ```
 
 ## Available Workflows
