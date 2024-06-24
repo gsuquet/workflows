@@ -9,7 +9,7 @@ on:
       queries:
         description: The queries to run
         type: string
-        required: true
+        required: false
         default: security-and-quality
       harden_runner:
         description: "Harden the runner"
