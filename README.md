@@ -5,11 +5,9 @@
     <img src="https://img.shields.io/github/license/gsuquet/workflows" 
     alt="License">
   </a>
-  <a href="
-https://securityscorecards.dev/viewer/?uri=github.com/gsuquet/workflows"
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/gsuquet/workflows"
     alt="openssf scorecard"> 
-    <img src="
-https://api.securityscorecards.dev/projects/github.com/gsuquet/workflows/badge"
+    <img src="https://api.securityscorecards.dev/projects/github.com/gsuquet/workflows/badge"
 alt="openssf score"/> 
   </a>
 </p>
