@@ -1,18 +1,31 @@
 # Centralized Workflows
 <p align="center">
-  <a href="https://github.com/gsuquet/workflows/blob/main/LICENSE" target="_blank" alt="License">
-    <img src="https://img.shields.io/github/license/gsuquet/workflows" alt="License">
+  <a href="https://github.com/gsuquet/workflows/blob/main/LICENSE" 
+    target="_blank" alt="License">
+    <img src="https://img.shields.io/github/license/gsuquet/workflows" 
+    alt="License">
   </a>
-  <a href="https://securityscorecards.dev/viewer/?uri=github.com/gsuquet/workflows" alt="openssf scorecard"> 
-    <img src="https://api.securityscorecards.dev/projects/github.com/gsuquet/workflows/badge" alt="openssf score"/> 
+  <a href="
+https://securityscorecards.dev/viewer/?uri=github.com/gsuquet/workflows"
+    alt="openssf scorecard"> 
+    <img src="
+https://api.securityscorecards.dev/projects/github.com/gsuquet/workflows/badge"
+alt="openssf score"/> 
   </a>
 </p>
 
 This repository contains all the github actions workflows used in my projects.
 
+## Table of Contents
+
+- [Usage](#usage)
+- [Available Workflows](#available-workflows)
+
 ## Usage
 
-To use a workflow in your project, either copy the workflow file to your project's `.github/workflows` directory or call it directly from the `uses` field in your workflow file.
+To use a workflow in your project, either copy the workflow file to your 
+project's `.github/workflows` directory or call it directly from 
+the `uses` field in your workflow file.
 
 ```yaml
 # .github/workflows/your-workflow.yml
