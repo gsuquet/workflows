@@ -9,4 +9,5 @@ The following versions of this project are currently being supported with securi
 | <1.0.0  | :x:                |
 
 ## Reporting a Vulnerability
-To report a vulnerability, please send an email to [gabriel.suquet.pro@proton.me](mailto:gabriel.suquet.pro@proton.me).  
+To report a vulnerability, please send an email to 
+[gabriel.suquet.pro@proton.me](mailto:gabriel.suquet.pro@proton.me).  
