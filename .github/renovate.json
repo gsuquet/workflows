@@ -2,5 +2,26 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>gsuquet/renovate:renovate-default-config"
+  ],
+  "packageRules": [
+    {
+      "description": "Use semantic commit type 'fix' for all actions",
+      "matchFileNames": [".github/workflows/**"],
+      "extends": [":semanticCommitTypeAll(fix)"]
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Update the version of the workflow in the README",
+      "customType": "regex",
+      "fileMatch": ["^README\\.md$"],
+      "matchStrings": [
+        "uses: gsuquet/workflows/.github/workflows/automation-labeler.yml@(?<currentValue>[^\\s]+)",
+        "uses: gsuquet/workflows/.github/workflows/automation-labeler.yml@(?<currentDigest>[a-z0-9]{40}|[a-z0-9]{64}) # tag=(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "gsuquet/workflows",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
+    }
   ]
 }
