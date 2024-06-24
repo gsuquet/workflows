@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PRE_COMMIT_VERSION: 3.7.0 # renovate: datasource=github-releases depName=pre-commit/pre-commit
+  PRE_COMMIT_VERSION: 3.7.1 # renovate: datasource=github-releases depName=pre-commit/pre-commit
 
 jobs:
   pre-commit:
