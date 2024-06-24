@@ -4,7 +4,7 @@
 	"name": "GitHub Centralized Workflows",
 
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/python@sha256:672331fb5736373404e965211a877fdabda822c3d93b85fc90ed00165241b556",
+	"image": "mcr.microsoft.com/devcontainers/python@sha256:d79353264c02d921f736cb31a8a1c1a3a1498f2e5e7097c52ddaf1a0a92fb6ec",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
     "features": {
