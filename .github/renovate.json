@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>gsuquet/renovate:renovate-default-config"
+    "github>gsuquet/renovate-config:renovate-default-github"
   ],
   "packageRules": [
     {
