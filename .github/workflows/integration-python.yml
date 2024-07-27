@@ -68,7 +68,7 @@ jobs:
       matrix:
         python-version: ${{ fromJSON(needs.setup.outputs.python-versions) }}
     steps:
-      - uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+      - uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
         if: ${{ inputs.harden_runner == true }}
         with:
           egress-policy: audit
@@ -101,7 +101,7 @@ jobs:
         python-version: ${{ fromJSON(needs.setup.outputs.python-versions) }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+        uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
         if: ${{ inputs.harden_runner == true }}
         with:
           egress-policy: audit
