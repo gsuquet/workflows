@@ -4,7 +4,7 @@
 	"name": "GitHub Centralized Workflows",
 
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/python:1.1.12-3.12-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/python:1.1.13-3.12-bookworm",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
     "features": {
